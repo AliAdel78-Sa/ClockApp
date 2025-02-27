@@ -1,0 +1,29 @@
+main {
+	overflow: hidden;
+	height: 100%;
+	position: relative;
+	section {
+		width: 100%;
+		padding: 20px;
+		height: 100%;
+		opacity: 0;
+		transition: 0.1s ease all;
+		position: absolute;
+		top: 0;
+		left: 0;
+		animation-duration: 0.5s;
+		animation-timing-function: cubic-bezier(1, 0.03, 0.18, 1.01);
+		&.active {
+			opacity: 1;
+		}
+	}
+}
+
+@keyframes goUp {
+	0% {
+		transform: translate(0, 200px);
+	}
+	100% {
+		transform: translate(0, 0);
+	}
+}

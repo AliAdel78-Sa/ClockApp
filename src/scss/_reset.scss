@@ -1,0 +1,44 @@
+@use "./mode-colors" as *;
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	text-decoration: none;
+	list-style: none;
+	// font-size: 1rem;
+	border: 0 transparent;
+	outline: 0 transparent;
+	font-family:  "Josefin Sans";
+	background-color: transparent;
+	color: var(--font-color);
+}
+
+a,
+a:is(:focus, :visited) {
+	color: var(--font-color);
+}
+
+body {
+	height: 100dvh;
+	display: grid;
+	background-color: var(--bg-color);
+	grid-template-columns: 280px 1fr;
+}
+
+@media (max-width: 1000px) {
+	body {
+		display: block;
+		nav {
+			position: absolute;
+			width: 280px;
+			height: 100%;
+			transition: 0.3s ease all;
+			left: -100%;
+			&.opened {
+				left: 0;
+			}
+		}
+	}
+}

@@ -1,0 +1,12 @@
+html:has(body[theme="light"]) {
+	--bg-color: #fff;
+}
+html:has(body[theme="dark"]) {
+	--bg-color: #272727;
+	--btn-color: #343434;
+	--border-color: #3c3c3c;
+	--font-color: #ffffff;
+	--hover-color: #2d2d2d;
+	--nav-bg-color: #202020;
+	--main-color: #76b9ed;
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			rel="shortcut icon"
+			href="./src/assets/clock.svg"
+			type="image/x-icon"
+		/>
+		<link
+			href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+			rel="stylesheet"
+		/>
+
+		<title>Clock App</title>
+	</head>
+	<body theme="dark">
+		<nav>
+			<div class="active-element"></div>
+			<h1>
+				<img src="./src//assets//clock.svg" alt="" />
+				Clock
+			</h1>
+			<ul>
+				<li tabindex="0" data-link="StopWatch" class="nav-link active">
+					<img src="./src/assets/timer.svg" alt="" />
+					Stop Watch
+				</li>
+				<li tabindex="0" data-link="Timer" class="nav-link">
+					<i class="bx bx-hourglass" style="font-size: 22px"></i>
+					Timer
+				</li>
+				<li tabindex="0" data-link="WorldClock" class="nav-link">
+					<img src="./src/assets/globe.svg" alt="" />
+					World Clock
+				</li>
+			</ul>
+		</nav>
+
+		<main>
+			<section data-link="Timer" class="page">
+				<h1>Timer</h1>
+			</section>
+			<section data-link="WorldClock" class="page">
+				<h1>WorldClock</h1>
+			</section>
+			<section data-link="StopWatch" class="stopwatch page active">
+				<div class="wrapper">
+					<h1 timer-element>
+						<span>00</span>:<span>00</span>:<span>00</span>.00
+					</h1>
+
+					<button start-btn>Start</button>
+					<button pause-btn>Pause</button>
+					<button reset-btn>Reset</button>
+					<button lap-btn>Lap</button>
+				</div>
+			</section>
+		</main>
+
+		<script type="module" src="/src/main.ts"></script>
+	</body>
+</html>
