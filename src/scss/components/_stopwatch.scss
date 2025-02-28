@@ -3,7 +3,6 @@ $mainColor: #272727;
 $navColor: #202020;
 
 .stopwatch {
-	display: flex;
 	align-items: center;
 	flex-flow: column;
 	.wrapper {
@@ -101,6 +100,9 @@ $navColor: #202020;
 			h1 {
 				font-size: 5rem;
 			}
+		}
+		[lap-table] {
+			width: 100%;
 		}
 	}
 }

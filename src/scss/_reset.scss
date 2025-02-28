@@ -27,6 +27,9 @@ body {
 }
 
 @media (max-width: 1000px) {
+	* {
+		cursor: default !important;
+	}
 	body {
 		display: block;
 		nav {

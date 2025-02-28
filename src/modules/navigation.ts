@@ -1,3 +1,5 @@
+import { closeNav } from "../ui/nav";
+
 const $ = (s: string) => document.querySelector(s)! as HTMLElement;
 const $A = (s: string) =>
 	document.querySelectorAll(s)! as NodeListOf<HTMLElement>;
@@ -8,6 +10,7 @@ const pages = $A(".page")!;
 
 navLinks.forEach((navLink) => {
 	navLink.addEventListener("click", () => {
+		closeNav();
 		const navLinkPage = navLink.getAttribute("data-link")!;
 		const currentActivePage = $(`.page.active[data-link=${navLinkPage}]`);
 		const { top } = navLink.getBoundingClientRect();
