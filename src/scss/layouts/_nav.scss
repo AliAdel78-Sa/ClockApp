@@ -15,10 +15,13 @@ nav {
 	background-color: var(--nav-bg-color);
 	padding: 0 5px;
 	position: relative;
+	* {
+		color: var(--font-color);
+	}
 	h1 {
 		margin-block: 10px;
 		font-weight: 500;
-		font-size: 15px;
+		font-size: 14px;
 		padding: 0 10px 10px;
 		display: flex;
 		align-items: center;

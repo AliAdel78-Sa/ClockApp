@@ -2,53 +2,115 @@ import axios from "axios";
 import moment from "moment-timezone";
 import "./scss/main.scss";
 import "./navigation";
-
-type lap = {
-	time: string;
-	totalTime: string;
-};
-
-let initialLaps: unknown[] = [];
-const laps: lap[] = JSON.parse(
-	localStorage.getItem("laps") || JSON.stringify(initialLaps)
-);
-
+const $ = (s: string) => document.querySelector(s) as HTMLElement;
 let startedTime = Number(localStorage.getItem("startedTime") || null);
 let running = localStorage.getItem("running") === "true";
 let intervalId: number | null = null;
 let elapsedTime: number = Number(localStorage.getItem("elapsedTime"));
 let totalPausedTime = Number(localStorage.getItem("totalPausedTime"));
-const timerElement = document.querySelector("[timer-element]");
-const startBtn = document.querySelector("[start-btn]");
-const pauseBtn = document.querySelector("[pause-btn]");
-const resetBtn = document.querySelector("[reset-btn]");
-const lapsTable = document.querySelector("[laps-table]");
+const timerElement = $("[timer-element]");
+const startBtn = $("[start-btn]");
+const pauseBtn = $("[pause-btn]");
+const resetBtn = $("[reset-btn]");
+const resetIcon = $("[reset-icon]");
+const lapBtn = $("[lap-btn]");
+const lapTable = $("[lap-table]");
+const lapIcon = $("[lap-icon]");
 startBtn?.addEventListener("click", startTimer);
 pauseBtn?.addEventListener("click", pauseTimer);
 resetBtn?.addEventListener("click", resetTimer);
-
-// TODO: ADD Laps Feature
-function addLap() {
-	let time: string = "00:00:00";
-	const prevLap = laps[laps.length - 1];
-	if (!prevLap) {
-		time = formatTime(Date.now() - startedTime - totalPausedTime, false);
+startBtn?.addEventListener("keydown", (e) => {
+	if (e.key === "Enter") {
+		startBtn.click();
+		pauseBtn.focus();
 	}
-}
-
+});
+pauseBtn?.addEventListener("keydown", (e) => {
+	if (e.key === "Enter") {
+		pauseBtn.click();
+		startBtn.focus();
+	}
+});
+resetBtn?.addEventListener("keydown", (e) => {
+	if (e.key === "Enter") resetTimer();
+});
+lapBtn.addEventListener("click", () => {
+	addLap();
+	updateLaps();
+});
+lapBtn.addEventListener("keydown", (e) => {
+	if (e.key === "Enter") lapBtn.click();
+});
+type Lap = {
+	time: number;
+	totalTime: number;
+	date: number;
+};
+const laps: Lap[] = JSON.parse(
+	localStorage.getItem("laps") || JSON.stringify([])
+);
 function updateLaps() {
-	lapsTable!.innerHTML = "";
+	lapTable.innerHTML = `<div class="row header">
+		<div class="col">Laps</div>
+		<div class="col">Time</div>
+		<div class="col">Total</div>
+	</div>`;
 	laps.forEach((lap, index) => {
-		const tr = document.createElement("tr");
-		const indexElement = document.createElement("td");
-		const time = document.createElement("td");
-		const totalTime = document.createElement("td");
-		indexElement.innerHTML = String(index);
-		time.innerHTML = String(lap.time);
-		totalTime.innerHTML = String(lap.totalTime);
-		tr.append(indexElement, time, totalTime);
-		lapsTable!.prepend(tr);
+		const lapTemplate = `<div class="row test">
+		<div class="col">${index + 1}</div>
+		<div class="col">${formatTime(lap.time, true)}</div>
+		<div class="col">${formatTime(lap.totalTime, true)}</div>
+	</div>`;
+		lapTable.insertAdjacentHTML("beforeend", lapTemplate);
 	});
+}
+function addLap() {
+	// * Logic here...
+	if (!running) return;
+	const totalTime =
+		Date.now() -
+		+localStorage.getItem("startedTime")! -
+		+localStorage.getItem("totalPausedTime")!;
+	const lastLap = laps[laps.length - 1];
+	let time: number = 0;
+	if (!lastLap) {
+		time = totalTime;
+	} else {
+		time = Date.now() - lastLap.date;
+	}
+
+	const lap: Lap = {
+		date: Date.now(),
+		totalTime,
+		time,
+	};
+	laps.push(lap);
+	updateLaps();
+	localStorage.setItem("laps", JSON.stringify(laps));
+}
+function updateUI(status: "stop" | "start" | "reset") {
+	switch (status) {
+		case "stop":
+			startBtn.style.display = "flex";
+			pauseBtn.style.display = "none";
+			timerElement.style.color = "#cecece";
+			lapIcon.style.color = "#7b7b7b";
+			break;
+		case "start":
+			pauseBtn.style.display = "flex";
+			startBtn.style.display = "none";
+			timerElement.style.color = "#fefefe";
+			resetIcon.style.fill = "#fefefe";
+			lapIcon.style.color = "#fefefe";
+			break;
+		case "reset":
+			startBtn.style.display = "flex";
+			pauseBtn.style.display = "none";
+			timerElement.style.color = "#cecece";
+			resetIcon.style.fill = "#7b7b7b";
+			lapIcon.style.color = "#7b7b7b";
+			break;
+	}
 }
 function pauseTimer() {
 	clearInterval(Number(intervalId));
@@ -60,24 +122,12 @@ function pauseTimer() {
 		localStorage.setItem("lastPause", String(Date.now()));
 	}
 	localStorage.setItem("elapsedTime", String(elapsedTime));
+	updateUI("stop");
 }
 function updateTimer(startedTime: number, totalPausedTime: number) {
 	elapsedTime = Date.now() - startedTime - totalPausedTime;
 	timerElement!.innerHTML = formatTime(elapsedTime, true);
 }
-
-// prettier-ignore
-const $ = (s: string, all?: boolean) => !all ? document.querySelector(s) as HTMLElement : document.querySelectorAll(s) as NodeListOf<HTMLElement>;
-
-const elements = {
-	element1: $(".element1"),
-	element2: $(".element2"),
-	element3: $(".element3"),
-	element4: $(".element4"),
-	element5: $(".element5"),
-	element6: $(".element6"),
-};
-
 function startTimer() {
 	running = true;
 	localStorage.setItem("running", String(running));
@@ -101,13 +151,13 @@ function startTimer() {
 			10
 		);
 	}
+	updateUI("start");
 }
 function resetTimer() {
 	clearInterval(Number(intervalId));
 	intervalId = null;
 	running = false;
-	timerElement!.innerHTML =
-		"<span>00</span>:<span>00</span>:<span>00</span>.00";
+	timerElement!.innerHTML = "00:00:00.00";
 	localStorage.removeItem("running");
 	localStorage.removeItem("startedTime");
 	localStorage.removeItem("lastPause");
@@ -116,8 +166,11 @@ function resetTimer() {
 	totalPausedTime = 0;
 	startedTime = 0;
 	elapsedTime = 0;
+	laps.length = 0;
+	localStorage.removeItem("laps");
+	updateLaps();
+	updateUI("reset");
 }
-
 function formatTime(ms: number, showMs: boolean): string {
 	const hours = Math.floor(ms / 3600000);
 	const minutes = Math.floor((ms % 3600000) / 60000);
@@ -128,9 +181,9 @@ function formatTime(ms: number, showMs: boolean): string {
 		!showMs ? "" : `.${pad(centiseconds)}`
 	}`;
 }
-
 timerElement!.innerHTML = formatTime(elapsedTime, true);
 if (running) startTimer();
+updateLaps();
 
 /*
 const unsupportedTimeZones: string[] = [
@@ -233,51 +286,4 @@ moment.tz.names().forEach(async (e) => {
 			: console.error("An unexpected error occurred:", error);
 	}
 });
-*/
-
-const experienceStart = new Date(2024, 6, 24, 21, 40, 0);
-function convertMilliseconds(ms: number) {
-	const MS_IN_A_DAY = 1000 * 60 * 60 * 24;
-	const MS_IN_A_YEAR = MS_IN_A_DAY * 365.25;
-	const MS_IN_A_MONTH = MS_IN_A_YEAR / 12;
-	const years = Math.floor(ms / MS_IN_A_YEAR);
-	ms %= MS_IN_A_YEAR;
-	const months = Math.floor(ms / MS_IN_A_MONTH);
-	ms %= MS_IN_A_MONTH;
-	const days = Math.floor(ms / MS_IN_A_DAY);
-	return { years, months, days };
-}
-console.log(convertMilliseconds(Date.now() - experienceStart.getTime()));
-
-/*
-function convertMilliseconds(ms: number) {
-	const oneSecond = 1000;
-	const oneMinute = oneSecond * 60;
-	const oneHour = oneMinute * 60;
-	const oneDay = oneHour * 24;
-	const oneMonth = oneDay * 30.44;
-	const oneYear = oneDay * 365.25;
-	const years = Math.floor(ms / oneYear);
-	ms %= oneYear;
-	const months = Math.floor(ms / oneMonth);
-	ms %= oneMonth;
-	const days = Math.floor(ms / oneDay);
-	ms %= oneDay;
-	const hours = Math.floor(ms / oneHour);
-	ms %= oneHour;
-	const minutes = Math.floor(ms / oneMinute);
-	ms %= oneMinute;
-	const seconds = Math.floor(ms / oneSecond);
-	ms %= oneSecond;
-	return `${String(years).padStart(2, "0")}:${String(months).padStart(
-		2,
-		"0"
-	)}:${String(days).padStart(2, "0")}:${String(hours).padStart(
-		2,
-		"0"
-	)}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
-		2,
-		"0"
-	)}.${String(ms).padStart(3, "0")}`;
-}
 */

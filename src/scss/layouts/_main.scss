@@ -11,8 +11,10 @@ main {
 		position: absolute;
 		top: 0;
 		left: 0;
-		animation-duration: 0.5s;
-		animation-timing-function: cubic-bezier(1, 0.03, 0.18, 1.01);
+		animation-duration: 0.3s;
+		animation-timing-function: ease;
+		animation-direction: alternate;
+		animation-fill-mode: both;
 		&.active {
 			opacity: 1;
 		}
@@ -22,8 +24,10 @@ main {
 @keyframes goUp {
 	0% {
 		transform: translate(0, 200px);
+		opacity: 0;
 	}
 	100% {
 		transform: translate(0, 0);
+		opacity: 1;
 	}
 }

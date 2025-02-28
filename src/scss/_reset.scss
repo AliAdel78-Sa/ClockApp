@@ -7,12 +7,11 @@
 	box-sizing: border-box;
 	text-decoration: none;
 	list-style: none;
-	// font-size: 1rem;
 	border: 0 transparent;
 	outline: 0 transparent;
-	font-family:  "Josefin Sans";
+	font-family: "Josefin Sans";
 	background-color: transparent;
-	color: var(--font-color);
+	user-select: none;
 }
 
 a,

@@ -37,6 +37,21 @@
 	<body>
 		<svg></svg>
 		<script>
+			function convertMilliseconds(ms: number) {
+				const MS_IN_A_DAY = 1000 * 60 * 60 * 24;
+				const MS_IN_A_YEAR = MS_IN_A_DAY * 365.25;
+				const MS_IN_A_MONTH = MS_IN_A_YEAR / 12;
+				const years = Math.floor(ms / MS_IN_A_YEAR);
+				ms %= MS_IN_A_YEAR;
+				const months = Math.floor(ms / MS_IN_A_MONTH);
+				ms %= MS_IN_A_MONTH;
+				const days = Math.floor(ms / MS_IN_A_DAY);
+				return { years, months, days };
+			}
+			console.log(
+				convertMilliseconds(Date.now() - new Date(2024, 6, 24, 21, 40, 0).getTime())
+			);
+			
 			const width = window.innerWidth * 0.9;
 			const height = window.innerHeight * 0.9;
 			const svg = d3
