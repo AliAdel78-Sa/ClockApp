@@ -59,3 +59,16 @@ function convertMilliseconds(ms: number) {
 console.log(
 	convertMilliseconds(Date.now() - new Date(2024, 6, 24, 21, 40, 0).getTime())
 );
+
+// 1s => s/6 deg
+// 60s => m/6 deg
+// 3600s => h/6 deg
+
+let m = 0;
+let s = 0;
+let h = 0;
+
+// Searching/Selecting TimeZones
+// Adding TimeZones
+// Deleting Timezones
+// Analog Clock For Each TimeZone

@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link
 			rel="shortcut icon"
-			href="./src/assets/clock.svg"
+			href="./src/assets/svgs/clock.svg"
 			type="image/x-icon"
 		/>
 		<link
@@ -17,7 +17,7 @@
 	</head>
 	<body theme="dark">
 		<div id="menu">
-			<img src="./src/assets/menu.svg" />
+			<img src="./src/assets/svgs/menu.svg" />
 		</div>
 
 		<div overlay></div>
@@ -30,7 +30,7 @@
 			</h1>
 			<ul>
 				<li tabindex="0" data-link="StopWatch" class="nav-link active">
-					<img src="./src/assets/timer.svg" alt="" />
+					<img src="./src/assets/svgs/timer.svg" alt="" />
 					Stop Watch
 				</li>
 				<li tabindex="0" data-link="Timer" class="nav-link">
@@ -38,20 +38,14 @@
 					Timer
 				</li>
 				<li tabindex="0" data-link="WorldClock" class="nav-link">
-					<img src="./src/assets/globe.svg" alt="" />
+					<img src="./src/assets/svgs/globe.svg" alt="" />
 					World Clock
 				</li>
 			</ul>
 		</nav>
 
 		<main>
-			<section data-link="Timer" class="page">
-				<h1>Timer</h1>
-			</section>
-			<section data-link="WorldClock" class="page">
-				<h1>WorldClock</h1>
-			</section>
-			<section data-link="StopWatch" class="stopwatch page active">
+			<section data-link="StopWatch" class="stopwatch page">
 				<div class="wrapper">
 					<h1 timer-element></h1>
 					<div class="play-container">
@@ -94,6 +88,31 @@
 						<div class="col">Total</div>
 					</div>
 				</div>
+			</section>
+			<section data-link="WorldClock" class="page world-clock active">
+				<main>
+					<h1>World Clock here</h1>
+				</main>
+				<aside>
+					<div class="timezone">
+						<div class="icon">
+							<img src="./src/assets/svgs/sun.svg" alt="" />
+						</div>
+						<span>8:25 <small>AM</small></span>
+						<div>
+							<h3>Berlin</h3>
+							<small>01/03/2025 -1 hr</small>
+						</div>
+					</div>
+
+				</aside>
+				<div class="buttons-container">
+					<button id="add-timezone-btn">x</button>
+					<button id="edit-timezones-btn">x</button>
+				</div>
+			</section>
+			<section data-link="Timer" class="page">
+				<h1>Timer</h1>
 			</section>
 		</main>
 		<script type="module" src="/src/modules/elements.ts"></script>

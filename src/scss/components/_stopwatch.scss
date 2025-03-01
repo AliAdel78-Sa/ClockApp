@@ -3,6 +3,7 @@ $mainColor: #272727;
 $navColor: #202020;
 
 .stopwatch {
+	display: flex;
 	align-items: center;
 	flex-flow: column;
 	.wrapper {

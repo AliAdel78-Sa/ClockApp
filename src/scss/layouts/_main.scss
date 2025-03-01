@@ -6,7 +6,6 @@ main {
 		width: 100%;
 		padding: 20px;
 		height: 100%;
-		display: none;
 		transition: 0.1s ease all;
 		position: absolute;
 		top: 0;
@@ -15,8 +14,11 @@ main {
 		animation-timing-function: ease;
 		animation-direction: alternate;
 		animation-fill-mode: both;
+		opacity: 0;
+		pointer-events: none;
 		&.active {
-			display: flex;
+			opacity: 1;
+			pointer-events: all;
 		}
 	}
 }
