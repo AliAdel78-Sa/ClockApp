@@ -28,7 +28,7 @@ moment.tz.names().forEach(async (tz) => {
 			data.hour,
 			data.minute
 		);
-		console.log(formatTime(localTime.getTime() - fetchedTime.getTime()));
+		// console.log(formatTime(localTime.getTime() - fetchedTime.getTime()));
 	} catch (error) {
 		axios.isAxiosError(error)
 			? console.log(error.response?.data)

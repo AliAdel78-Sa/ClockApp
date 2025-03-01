@@ -1,15 +1,15 @@
+import storage from "../utils/localStorage.util";
 import elements from "../modules/elements";
 import type { Lap } from "../types";
 import { formatTime } from "../utils/stopwatch.utils";
 
-let startedTime = Number(localStorage.getItem("startedTime") || null);
-let running = localStorage.getItem("running") === "true";
+let startedTime = Number(storage.get("startedTime"));
+let running = storage.get("running") === "true";
 let intervalId: number | null = null;
-let elapsedTime: number = Number(localStorage.getItem("elapsedTime"));
-let totalPausedTime = Number(localStorage.getItem("totalPausedTime"));
-const laps: Lap[] = JSON.parse(
-	localStorage.getItem("laps") || JSON.stringify([])
-);
+let elapsedTime: number = Number(storage.get("elapsedTime"));
+let totalPausedTime = Number(storage.get("totalPausedTime"));
+const laps = storage.get<Lap[]>("laps", [])!;
+
 elements.startBtn.addEventListener("click", startTimer);
 elements.pauseBtn.addEventListener("click", pauseTimer);
 elements.resetBtn.addEventListener("click", resetTimer);
@@ -55,8 +55,8 @@ function addLap() {
 	if (!running) return;
 	const totalTime =
 		Date.now() -
-		+localStorage.getItem("startedTime")! -
-		+localStorage.getItem("totalPausedTime")!;
+		+storage.get("startedTime")! -
+		+storage.get("totalPausedTime")!;
 	const lastLap = laps[laps.length - 1];
 	let time: number = 0;
 	if (!lastLap) {
@@ -72,7 +72,7 @@ function addLap() {
 	};
 	laps.push(lap);
 	updateLaps();
-	localStorage.setItem("laps", JSON.stringify(laps));
+	storage.set("laps", laps);
 }
 function updateUI(status: "stop" | "start" | "reset") {
 	switch (status) {
@@ -102,12 +102,12 @@ function pauseTimer() {
 	clearInterval(Number(intervalId));
 	intervalId = null;
 	running = false;
-	localStorage.setItem("running", String(running));
-	if (localStorage.getItem("startedTime") === null) return;
-	if (!localStorage.getItem("lastPause")) {
-		localStorage.setItem("lastPause", String(Date.now()));
+	storage.set("running", running);
+	if (storage.get("startedTime") === null) return;
+	if (!storage.get("lastPause")) {
+		storage.set("lastPause", Date.now());
 	}
-	localStorage.setItem("elapsedTime", String(elapsedTime));
+	storage.set("elapsedTime", elapsedTime);
 	updateUI("stop");
 }
 function updateTimer(startedTime: number, totalPausedTime: number) {
@@ -116,23 +116,22 @@ function updateTimer(startedTime: number, totalPausedTime: number) {
 }
 function startTimer() {
 	running = true;
-	localStorage.setItem("running", String(running));
+	storage.set("running", String(running));
 	if (!startedTime) {
 		startedTime = Date.now();
-		localStorage.setItem("startedTime", String(Date.now()));
+		storage.set("startedTime", Date.now());
 	}
-	if (localStorage.getItem("lastPause")) {
-		totalPausedTime +=
-			Date.now() - Number(localStorage.getItem("lastPause"));
-		localStorage.setItem("totalPausedTime", String(totalPausedTime));
-		localStorage.removeItem("lastPause");
+	if (storage.get("lastPause")) {
+		totalPausedTime += Date.now() - Number(storage.get("lastPause"));
+		storage.set("totalPausedTime", totalPausedTime);
+		storage.remove("lastPause");
 	}
 	if (!intervalId) {
 		intervalId = window.setInterval(
 			() =>
 				updateTimer(
 					startedTime,
-					Number(localStorage.getItem("totalPausedTime"))
+					Number(storage.get("totalPausedTime"))
 				),
 			10
 		);
@@ -144,12 +143,12 @@ function resetTimer() {
 	intervalId = null;
 	running = false;
 	elements.timerElement.innerHTML = "00:00:00.00";
-	localStorage.removeItem("running");
-	localStorage.removeItem("startedTime");
-	localStorage.removeItem("lastPause");
-	localStorage.removeItem("elapsedTime");
-	localStorage.removeItem("totalPausedTime");
-	localStorage.removeItem("laps");
+	storage.remove("running");
+	storage.remove("startedTime");
+	storage.remove("lastPause");
+	storage.remove("elapsedTime");
+	storage.remove("totalPausedTime");
+	storage.remove("laps");
 	totalPausedTime = 0;
 	startedTime = 0;
 	elapsedTime = 0;

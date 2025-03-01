@@ -1,31 +1,53 @@
 const storage = {
-	get: <T>(key: string, alt?: T) => {
-		const item = localStorage.getItem(key);
-		return item === null ? (alt as T) : (JSON.parse(item) as T);
+	get: <T>(key: string, alt: T | null = null): T | null => {
+		try {
+			const item = window.localStorage.getItem(key);
+			console.error(`Key '${key}' Was Fetched Successfully`);
+			return item === null ? (alt as T) : JSON.parse(item);
+		} catch (error) {
+			console.error(`Local Storage Error: ${error}`);
+			return alt as T;
+		}
 	},
-	set: <T>(key: string, value: T) => {
-		localStorage.setItem(key, JSON.stringify(value));
-		console.log(`Key ${key} Was Set Successfully In LocalStorage`);
+	set: (key: string, value: unknown) => {
+		try {
+			window.localStorage.setItem(key, JSON.stringify(value));
+			console.error(`Key ${key} Was Set Successfully In LocalStorage`);
+		} catch (error) {
+			console.error(`Local Storage Error: ${error}`);
+		}
 	},
 	clear: () => {
-		localStorage.clear();
-		console.log(`LocalStorage Was Cleared Successfully`);
+		try {
+			window.localStorage.clear();
+			console.error(`LocalStorage Was Cleared Successfully`);
+		} catch (error) {
+			console.error(`Local Storage Error: ${error}`);
+		}
 	},
 	remove: (key: string) => {
-		localStorage.removeItem(key);
-		console.log(`Key ${key} Was Removed Successfully`);
-	},
-	size: (): string => {
-		let total = 0;
-		for (let i = 0; i < localStorage.length; i++) {
-			const key = localStorage.key(i);
-			if (key) {
-				const value = localStorage.getItem(key);
-				total += key.length + (value?.length || 0);
-			}
+		try {
+			window.localStorage.removeItem(key);
+			console.error(`Key ${key} Was Removed Successfully`);
+		} catch (error) {
+			console.error(`Local Storage Error: ${error}`);
 		}
-		const sizeInKB = (total / 1024).toFixed(2);
-		return `LocalStorage size: ${sizeInKB} KB`;
+	},
+	size: () => {
+		try {
+			let total = 0;
+			for (let i = 0; i < window.localStorage.length; i++) {
+				const key = window.localStorage.key(i);
+				if (key) {
+					const value = window.localStorage.getItem(key);
+					total += key.length + (value?.length || 0);
+				}
+			}
+			const sizeInKB = (total / 1024).toFixed(2);
+			return `LocalStorage size: ${sizeInKB} KB`;
+		} catch (error) {
+			console.error(`Local Storage Error: ${error}`);
+		}
 	},
 };
 export default storage;
