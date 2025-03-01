@@ -1,7 +1,7 @@
 const storage = {
 	get: <T>(key: string, alt?: T) => {
 		const item = localStorage.getItem(key);
-		return item === null ? (alt as T) : JSON.parse(item);
+		return item === null ? (alt as T) : (JSON.parse(item) as T);
 	},
 	set: <T>(key: string, value: T) => {
 		localStorage.setItem(key, JSON.stringify(value));
