@@ -104,11 +104,24 @@
 							<small>01/03/2025 -1 hr</small>
 						</div>
 					</div>
-
 				</aside>
 				<div class="buttons-container">
-					<button id="add-timezone-btn">x</button>
-					<button id="edit-timezones-btn">x</button>
+					<button id="add-timezone-btn">
+						<img src="./src/assets/svgs/edit.svg" alt="" />
+					</button>
+					<button id="add-timezone-btn">
+						<img src="./src/assets/svgs/add.svg" alt="" />
+					</button>
+				</div>
+
+				<div id="pop-up">
+					<h3>Add new location</h3>
+					<input type="text" placeholder="Enter a location" />
+					<div class="locations"></div>
+					<div class="btns">
+						<button>Add</button>
+						<button>Cancel</button>
+					</div>
 				</div>
 			</section>
 			<section data-link="Timer" class="page">

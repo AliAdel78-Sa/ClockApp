@@ -1,6 +1,32 @@
 .world-clock {
 	display: grid;
 	grid-template-columns: 1fr 500px;
+	position: relative;
+
+	.buttons-container {
+		position: fixed;
+		bottom: 40px;
+		right: 40px;
+		background-color: var(--hover-color);
+		border: 1px solid rgba($color: #fff, $alpha: 0.1);
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 5px;
+		border-radius: 5px;
+		button {
+			border-radius: 5px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 40px;
+			aspect-ratio: 1;
+			opacity: 0.8;
+			&:hover {
+				background-color: var(--btn-color);
+			}
+		}
+	}
 	aside {
 		display: flex;
 		flex-flow: column;
@@ -17,6 +43,8 @@
 		padding: 20px;
 		border-radius: 7px;
 		transition: 0.1s ease all;
+		box-shadow: 0 0 2px 2px rgba($color: #000000, $alpha: 0.1);
+		border: 1px solid transparent;
 		span {
 			font-size: 20px;
 		}
@@ -32,8 +60,7 @@
 			color: var(--font-color);
 			font-weight: normal;
 		}
-		box-shadow: 0 0 2px 2px rgba($color: #000000, $alpha: 0.1);
-		border: 1px solid transparent;
+
 		&:hover {
 			background-color: #2e2e2e;
 			border: 1px solid rgba($color: #fff, $alpha: 0.1);
@@ -44,6 +71,7 @@
 @media (max-width: 1000px) {
 	.world-clock {
 		display: block;
+		padding-top: 80px;
 		main {
 			display: none;
 		}
