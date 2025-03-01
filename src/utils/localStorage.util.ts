@@ -1,18 +1,16 @@
 const storage = {
-	get: <T>(key: string, alt: T | null = null): T | null => {
+	get: <T>(key: string, alt: T | null = null) => {
 		try {
 			const item = window.localStorage.getItem(key);
-			console.error(`Key '${key}' Was Fetched Successfully`);
-			return item === null ? (alt as T) : JSON.parse(item);
+			return item !== null ? (JSON.parse(item) as T) : alt;
 		} catch (error) {
 			console.error(`Local Storage Error: ${error}`);
-			return alt as T;
+			return alt;
 		}
 	},
 	set: (key: string, value: unknown) => {
 		try {
 			window.localStorage.setItem(key, JSON.stringify(value));
-			console.error(`Key ${key} Was Set Successfully In LocalStorage`);
 		} catch (error) {
 			console.error(`Local Storage Error: ${error}`);
 		}
@@ -20,7 +18,6 @@ const storage = {
 	clear: () => {
 		try {
 			window.localStorage.clear();
-			console.error(`LocalStorage Was Cleared Successfully`);
 		} catch (error) {
 			console.error(`Local Storage Error: ${error}`);
 		}
@@ -28,7 +25,6 @@ const storage = {
 	remove: (key: string) => {
 		try {
 			window.localStorage.removeItem(key);
-			console.error(`Key ${key} Was Removed Successfully`);
 		} catch (error) {
 			console.error(`Local Storage Error: ${error}`);
 		}
@@ -44,7 +40,7 @@ const storage = {
 				}
 			}
 			const sizeInKB = (total / 1024).toFixed(2);
-			return `LocalStorage size: ${sizeInKB} KB`;
+			console.log(`LocalStorage size: ${sizeInKB} KB`);
 		} catch (error) {
 			console.error(`Local Storage Error: ${error}`);
 		}

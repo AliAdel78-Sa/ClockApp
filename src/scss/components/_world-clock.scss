@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .world-clock {
 	display: grid;
 	grid-template-columns: 1fr 500px;
@@ -123,7 +125,7 @@
 	}
 	button:first-child {
 		background-color: #76b9ed;
-		color: invert(#fff);
+		color: color.invert(#fff);
 	}
 	button:last-child {
 		background-color: #2e2e2e;
