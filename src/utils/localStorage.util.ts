@@ -1,4 +1,6 @@
-const storage = {
+import { LocalStorage } from "@/types";
+
+const storage: LocalStorage = {
 	get: <T>(key: string, alt: T | null = null) => {
 		try {
 			const item = window.localStorage.getItem(key);

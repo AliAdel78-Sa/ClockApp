@@ -19,3 +19,11 @@ export type TimeZones = {
 	timeZone: string;
 	year: number;
 };
+
+export type LocalStorage = {
+	get: <T>(key: string, alt?: T | null) => T | null;
+	set: (key: string, value: unknown) => void;
+	clear: () => void;
+	remove: (key: string) => void;
+	size: () => void;
+};

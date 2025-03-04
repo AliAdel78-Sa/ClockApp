@@ -1,4 +1,11 @@
+/**
+ *
+ * @param s CSS Selector For The Element
+ * @returns HTMLElement
+ */
+
 const $ = (s: string) => document.querySelector(s)! as HTMLElement;
+
 const $a = (s: string) =>
 	document.querySelectorAll(s)! as NodeListOf<HTMLElement>;
 
@@ -14,5 +21,9 @@ const elements = {
 	nav: $("#nav"),
 	navMenu: $("#menu"),
 	overlay: $("[overlay]"),
+	popUp: $("#pop-up"),
+	showTimeZone: $("#show-timezone-btn"),
+	addTimeZone: $("[add-timezone-btn]"),
+	cancelTimeZone: $("[cancel-timezone-btn]"),
 };
 export default elements;

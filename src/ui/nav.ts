@@ -1,4 +1,4 @@
-import elements from "../modules/elements";
+import elements from "@/modules/elements";
 
 elements.navMenu.addEventListener("click", openNav);
 elements.overlay.addEventListener("click", closeNav);

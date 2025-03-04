@@ -1,4 +1,4 @@
-import { closeNav } from "../ui/nav";
+import { closeNav } from "@/ui/nav";
 
 const $ = (s: string) => document.querySelector(s)! as HTMLElement;
 const $A = (s: string) =>

@@ -7,8 +7,8 @@
 
 	.buttons-container {
 		position: fixed;
-		bottom: 40px;
-		right: 40px;
+		bottom: 20px;
+		right: 20px;
 		background-color: var(--hover-color);
 		border: 1px solid rgba($color: #fff, $alpha: 0.1);
 		display: flex;
@@ -83,13 +83,13 @@
 	border-radius: 10px;
 	width: 350px;
 	opacity: 0;
-	z-index: 20;
+	z-index: 52;
 	pointer-events: none;
 	box-shadow: 0px 0px 15px 3px rgba(0 0 0 / 0.3);
 	&.opened {
 		opacity: 1;
 		pointer-events: all;
-		transform: translate(-50%, -100%);
+		transform: translate(-50%, -50%);
 	}
 	h3 {
 		font-size: 24px;
@@ -126,9 +126,34 @@
 	button:first-child {
 		background-color: #76b9ed;
 		color: color.invert(#fff);
+		&:hover {
+			background-color: lighten(#76b9ed, 5%);
+		}
 	}
 	button:last-child {
 		background-color: #2e2e2e;
+		&:hover {
+			background-color: lighten(#2e2e2e, 5%);
+		}
+	}
+}
+
+.locations {
+	background-color: lighten(#2e2e2e, 1%);
+	position: absolute;
+	width: 90%;
+	left: 50%;
+	transform: translateX(-50%);
+	border-radius: 5px;
+	top: 55%;
+	max-height: 300px;
+	overflow: auto;
+	scrollbar-width: none;
+	&:not(:has(.location)) {
+		background-color: #fff;
+	}
+	.location {
+		padding: 10px;
 	}
 }
 

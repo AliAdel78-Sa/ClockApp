@@ -25,7 +25,7 @@
 		<nav id="nav">
 			<div class="active-element"></div>
 			<h1>
-				<img src="./src//assets//clock.svg" alt="" />
+				<img src="./src//assets/svgs/clock.svg" alt="" />
 				Clock
 			</h1>
 			<ul>
@@ -43,7 +43,20 @@
 				</li>
 			</ul>
 		</nav>
-
+		<div id="pop-up" class="">
+			<h3>Add new location</h3>
+			<input type="text" placeholder="Enter a location" />
+			<div class="locations">
+				<p class="location">Hello World :)</p>
+				<p class="location">Hello World :)</p>
+				<p class="location">Hello World :)</p>
+				<p class="location">Hello World :)</p>
+			</div>
+			<div class="btns">
+				<button add-timezone-btn>Add</button>
+				<button cancel-timezone-btn>Cancel</button>
+			</div>
+		</div>
 		<main>
 			<section data-link="StopWatch" class="stopwatch page">
 				<div class="wrapper">
@@ -91,7 +104,7 @@
 			</section>
 			<section data-link="WorldClock" class="page world-clock active">
 				<main>
-					<h1>World Clock here</h1>
+					<!-- World Clock here -->
 				</main>
 				<aside>
 					<div class="timezone">
@@ -106,22 +119,12 @@
 					</div>
 				</aside>
 				<div class="buttons-container">
-					<button id="add-timezone-btn">
+					<button id="edit-timezones-btn">
 						<img src="./src/assets/svgs/edit.svg" alt="" />
 					</button>
-					<button id="add-timezone-btn">
+					<button id="show-timezone-btn">
 						<img src="./src/assets/svgs/add.svg" alt="" />
 					</button>
-				</div>
-
-				<div id="pop-up" class="">
-					<h3>Add new location</h3>
-					<input type="text" placeholder="Enter a location" />
-					<div class="locations"></div>
-					<div class="btns">
-						<button>Add</button>
-						<button>Cancel</button>
-					</div>
 				</div>
 			</section>
 			<section data-link="Timer" class="page">

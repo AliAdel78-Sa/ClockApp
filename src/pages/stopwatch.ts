@@ -1,7 +1,7 @@
-import storage from "../utils/localStorage.util";
-import elements from "../modules/elements";
-import type { Lap } from "../types";
-import { formatTime } from "../utils/stopwatch.utils";
+import storage from "@/utils/localStorage.util";
+import elements from "@/modules/elements";
+import type { Lap } from "@/types";
+import { formatTime } from "@/utils/stopwatch.utils";
 
 let startedTime = Number(storage.get("startedTime"));
 let running = storage.get("running") === "true";
