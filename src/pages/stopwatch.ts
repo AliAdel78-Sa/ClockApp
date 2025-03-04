@@ -37,19 +37,38 @@ elements.lapBtn.addEventListener("keydown", (e) => {
 });
 
 function updateLaps() {
-	elements.lapTable.innerHTML = `<div class="row header">
-		<div class="col">Laps</div>
-		<div class="col">Time</div>
-		<div class="col">Total</div>
-	</div>`;
+	elements.lapTable.innerHTML = "";
 	laps.forEach((lap, index) => {
-		const lapTemplate = `<div class="row test">
-		<div class="col">${index + 1}</div>
-		<div class="col">${formatTime(lap.time)}</div>
-		<div class="col">${formatTime(lap.totalTime)}</div>
-	</div>`;
-		elements.lapTable.insertAdjacentHTML("beforeend", lapTemplate);
+		elements.lapTable.prepend(
+			buildLap(
+				String(index + 1),
+				formatTime(lap.time),
+				formatTime(lap.totalTime),
+				false
+			)
+		);
 	});
+	elements.lapTable.prepend(buildLap("Laps", "Time", "Total", true));
+}
+function buildLap(
+	index: string,
+	time: string,
+	totalTime: string,
+	label: boolean
+) {
+	const lapElement = document.createElement("div");
+	lapElement.className = `row ${label ? "header" : "test"}`;
+	const lapIndex = document.createElement("div");
+	const lapTime = document.createElement("div");
+	const lapTotalTime = document.createElement("div");
+	lapIndex.className = "col";
+	lapTime.className = "col";
+	lapTotalTime.className = "col";
+	lapIndex.innerHTML = index;
+	lapTime.innerHTML = time;
+	lapTotalTime.innerHTML = totalTime;
+	lapElement.append(lapIndex, lapTime, lapTotalTime);
+	return lapElement;
 }
 function addLap() {
 	if (!running) return;
@@ -58,17 +77,10 @@ function addLap() {
 		+storage.get("startedTime")! -
 		+storage.get("totalPausedTime")!;
 	const lastLap = laps[laps.length - 1];
-	let time: number = 0;
-	if (!lastLap) {
-		time = totalTime;
-	} else {
-		time = Date.now() - lastLap.date;
-	}
-
 	const lap: Lap = {
 		date: Date.now(),
 		totalTime,
-		time,
+		time: lastLap ? Date.now() - lastLap.date : totalTime,
 	};
 	laps.push(lap);
 	updateLaps();
@@ -99,7 +111,7 @@ function updateUI(status: "stop" | "start" | "reset") {
 	}
 }
 function pauseTimer() {
-	clearInterval(Number(intervalId));
+	window.clearInterval(Number(intervalId));
 	intervalId = null;
 	running = false;
 	storage.set("running", running);
@@ -128,18 +140,14 @@ function startTimer() {
 	}
 	if (!intervalId) {
 		intervalId = window.setInterval(
-			() =>
-				updateTimer(
-					startedTime,
-					Number(storage.get("totalPausedTime"))
-				),
+			() => updateTimer(startedTime, totalPausedTime),
 			10
 		);
 	}
 	updateUI("start");
 }
 function resetTimer() {
-	clearInterval(Number(intervalId));
+	window.clearInterval(Number(intervalId));
 	intervalId = null;
 	running = false;
 	elements.timerElement.innerHTML = "00:00:00.00";

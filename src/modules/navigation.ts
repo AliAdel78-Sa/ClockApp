@@ -21,7 +21,7 @@ navLinks.forEach((navLink) => {
 		const page = $(`.page[data-link=${navLinkPage}]`);
 		page.classList.add("active");
 		if (!currentActivePage) {
-			page.style.animationName = "goUp";
+			page.style.animationName = "fadeUp";
 			setTimeout(() => (page.style.animationName = ""), 500);
 		}
 	});
