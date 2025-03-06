@@ -30,5 +30,6 @@ const elements = {
 	hourHand: $(".hour"),
 	minuteHand: $(".minute"),
 	secondHand: $(".second"),
+	timeZoneCity: $("[timezone-city]"),
 };
 export default elements;

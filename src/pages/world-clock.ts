@@ -128,7 +128,7 @@ function renderTimeZones() {
 			"beforeend",
 			`<div class="timezone" differenceBetweenLocal="${
 				tz.differenceBetweenLocal
-			}">
+			}" timeZoneCityName="${tz.cityName}">
 				<div class="icon">
 					<img src="../../svgs/${tz.night ? "moon" : "sun"}.svg" />
 				</div>
@@ -148,6 +148,8 @@ function renderTimeZones() {
 		document.querySelectorAll(".timezone")! as NodeListOf<HTMLElement>
 	).forEach((tz) => {
 		tz.addEventListener("click", () => {
+			elements.timeZoneCity.innerHTML =
+				tz.getAttribute("timeZoneCityName")!;
 			clearInterval(+analogClockId!);
 			updateTime(
 				new Date(
@@ -233,11 +235,11 @@ function updateTime(date: Date) {
 	elements.minuteHand.style.transform = `rotate(${m}deg)`;
 	elements.hourHand.style.transform = `rotate(${h}deg)`;
 }
+elements.timeZoneCity.innerHTML = "Local";
 updateTime(
 	new Date(Date.now() + timeZones[0].differenceBetweenLocal * 1000 * 3600)
 );
 updateTimeZones();
-
 analogClockId = window.setInterval(
 	() =>
 		updateTime(
