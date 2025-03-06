@@ -12,16 +12,13 @@
 			href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
 			rel="stylesheet"
 		/>
-
 		<title>Clock App</title>
 	</head>
 	<body theme="dark">
 		<div id="menu">
 			<img src="./src/assets/svgs/menu.svg" />
 		</div>
-
 		<div overlay class=""></div>
-
 		<nav id="nav">
 			<div class="active-element"></div>
 			<h1>
@@ -63,14 +60,30 @@
 				<div class="wrapper">
 					<h1 timer-element></h1>
 					<div class="play-container">
-						<div lap-btn id="lap" tabindex="0">
+						<div
+							lap-btn
+							id="lap"
+							aria-label="Add A Lap"
+							tabindex="0"
+						>
 							<i class="bx bxs-flag bx-md" lap-icon></i>
 						</div>
 						<div class="pause-play">
-							<div pause-btn id="pause" tabindex="0">
+							<div
+								pause-btn
+								id="pause"
+								aria-label="Pause The StopWatch"
+								tabindex="0"
+							>
 								<i class="bx bx-pause"></i>
 							</div>
-							<div start-btn id="play" class="play" tabindex="0">
+							<div
+								start-btn
+								id="play"
+								aria-label="Start The StopWatch"
+								class="play"
+								tabindex="0"
+							>
 								<i
 									class="bx bx-play"
 									style="transform: translateX(3px)"
@@ -107,18 +120,7 @@
 				<main>
 					<!-- World Clock here -->
 				</main>
-				<aside>
-					<div class="timezone">
-						<div class="icon">
-							<img src="./src/assets/svgs/sun.svg" alt="" />
-						</div>
-						<span>8:25 <small>AM</small></span>
-						<div>
-							<h3>Berlin</h3>
-							<small>01/03/2025 -1 hr</small>
-						</div>
-					</div>
-				</aside>
+				<aside timeZones></aside>
 				<div class="buttons-container">
 					<button id="edit-timezones-btn">
 						<img src="./src/assets/svgs/edit.svg" alt="" />

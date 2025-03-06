@@ -39,7 +39,6 @@ body {
 			transition: 0.3s ease all;
 			left: -100%;
 			z-index: 51;
-
 			&.opened {
 				left: 0;
 			}

@@ -4,7 +4,7 @@ export type Lap = {
 	date: number;
 };
 
-export type TimeZones = {
+export type fetchedTimeZone = {
 	date: string;
 	dateTime: string;
 	day: number;
@@ -18,6 +18,16 @@ export type TimeZones = {
 	time: string;
 	timeZone: string;
 	year: number;
+};
+
+export type cleanedTimeZone = {
+	id: number;
+	timezonename: string;
+	differenceBetweenLocal: number;
+	date: string;
+	time: string;
+	cityName: string;
+	night: boolean | null;
 };
 
 export type LocalStorage = {

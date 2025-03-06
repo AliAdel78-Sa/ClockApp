@@ -27,5 +27,6 @@ const elements = {
 	cancelTimeZone: $("[cancel-timezone-btn]"),
 	locationInput: $("#location-input") as HTMLInputElement,
 	locations: $(".locations"),
+	timeZones: $("[timeZones]"),
 };
 export default elements;

@@ -22,7 +22,7 @@ navLinks.forEach((navLink) => {
 		page.classList.add("active");
 		if (!currentActivePage) {
 			page.style.animationName = "fadeUp";
-			setTimeout(() => (page.style.animationName = ""), 500);
+			setTimeout(() => (page.style.animationName = ""), 300);
 		}
 	});
 	navLink.addEventListener("keydown", (e) => {
