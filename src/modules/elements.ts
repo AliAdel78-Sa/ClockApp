@@ -28,5 +28,8 @@ const elements = {
 	locationInput: $("#location-input") as HTMLInputElement,
 	locations: $(".locations"),
 	timeZones: $("[timeZones]"),
+	hourHand: $(".hour"),
+	minuteHand: $(".minute"),
+	secondHand: $(".second"),
 };
 export default elements;

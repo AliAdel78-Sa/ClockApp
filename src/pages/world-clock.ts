@@ -192,3 +192,17 @@ function getUserLocalTime(): cleanedTimeZone {
 }
 updateTimeZones();
 intervalid = window.setInterval(updateTimeZones, 30 * 1000);
+const updateTime = () => {
+	let date = new Date();
+	elements.secondHand.style.transform = `rotate(${
+		(date.getSeconds() / 60) * 360
+	}deg)`;
+	elements.minuteHand.style.transform = `rotate(${
+		(date.getMinutes() / 60) * 360
+	}deg)`;
+	elements.hourHand.style.transform = `rotate(${
+		(date.getHours() / 12) * 360
+	}deg)`;
+};
+setInterval(updateTime, 1000);
+updateTime();
