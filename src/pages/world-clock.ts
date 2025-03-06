@@ -3,8 +3,9 @@ import elements from "@/modules/elements";
 import axios from "axios";
 import { unsupportedTimeZones } from "@/data/timezones";
 import type { cleanedTimeZone, fetchedTimeZone } from "@/types";
-import { formatTime } from "@/utils/stopwatch.utils";
 import storage from "@/utils/localStorage.util";
+import { formatTime } from "@/utils/stopwatch.utils";
+
 let intervalid: number | null = null;
 const timeZones: cleanedTimeZone[] = storage.get<cleanedTimeZone[]>(
 	"timeZones",
@@ -126,7 +127,7 @@ function renderTimeZones() {
 			"beforeend",
 			`<div class="timezone">
 				<div class="icon">
-					<img src="./src/assets/svgs/${tz.night ? "moon" : "sun"}.svg" />
+					<img src="../../svgs/${tz.night ? "moon" : "sun"}.svg" />
 				</div>
 				<span>${tz.time.split(" ")[0]} <small>${tz.time.split(" ")[1]}</small></span>
 				<div>
@@ -190,19 +191,19 @@ function getUserLocalTime(): cleanedTimeZone {
 	};
 	return localTimeZone;
 }
+function updateTime(date: Date) {
+	let s = date.getSeconds() * 6; // 6° per second
+	let m = date.getMinutes() * 6 + date.getSeconds() * 0.1; // 6° per min + 0.1° per sec
+	let h =
+		(date.getHours() % 12) * 30 +
+		date.getMinutes() * 0.5 +
+		date.getSeconds() * (1 / 120);
+	// 30° per hour + 0.5° per min + 1/120° per sec
+	elements.secondHand.style.transform = `rotate(${s}deg)`;
+	elements.minuteHand.style.transform = `rotate(${m}deg)`;
+	elements.hourHand.style.transform = `rotate(${h}deg)`;
+}
+updateTime(new Date());
+setInterval(() => updateTime(new Date()), 1000);
 updateTimeZones();
 intervalid = window.setInterval(updateTimeZones, 30 * 1000);
-const updateTime = () => {
-	let date = new Date();
-	elements.secondHand.style.transform = `rotate(${
-		(date.getSeconds() / 60) * 360
-	}deg)`;
-	elements.minuteHand.style.transform = `rotate(${
-		(date.getMinutes() / 60) * 360
-	}deg)`;
-	elements.hourHand.style.transform = `rotate(${
-		(date.getHours() / 12) * 360
-	}deg)`;
-};
-setInterval(updateTime, 1000);
-updateTime();

@@ -5,7 +5,6 @@
  */
 
 const $ = (s: string) => document.querySelector(s)! as HTMLElement;
-
 const $a = (s: string) =>
 	document.querySelectorAll(s)! as NodeListOf<HTMLElement>;
 
