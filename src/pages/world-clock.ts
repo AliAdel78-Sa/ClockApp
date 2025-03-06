@@ -6,7 +6,8 @@ import type { cleanedTimeZone, fetchedTimeZone } from "@/types";
 import storage from "@/utils/localStorage.util";
 import { formatTime } from "@/utils/stopwatch.utils";
 
-let intervalid: number | null = null;
+let timeZonesTimeId: number | null = null;
+let analogClockId: number | null = null;
 const timeZones: cleanedTimeZone[] = storage.get<cleanedTimeZone[]>(
 	"timeZones",
 	[getUserLocalTime()]
@@ -19,12 +20,12 @@ elements.addTimeZone.addEventListener("click", async () => {
 	hidePopUp();
 	elements.locationInput.value = "";
 	elements.timeZones.innerHTML = `<h1 style="color: var(--font-color);">Updating Data...</h1>`;
-	clearInterval(Number(intervalid));
+	clearInterval(Number(timeZonesTimeId));
 	const data = await fetchTimeZone(selectedTimeZone);
 	const cleanedData = cleanTimeZone(data);
 	saveTimeZone(cleanedData);
 	updateTimeZones();
-	intervalid = window.setInterval(updateTimeZones, 30 * 1000);
+	timeZonesTimeId = window.setInterval(updateTimeZones, 30 * 1000);
 });
 elements.locationInput.addEventListener("input", (e) => {
 	elements.locations.innerHTML = "";
@@ -125,7 +126,9 @@ function renderTimeZones() {
 	timeZones.forEach((tz) => {
 		elements.timeZones.insertAdjacentHTML(
 			"beforeend",
-			`<div class="timezone">
+			`<div class="timezone" differenceBetweenLocal="${
+				tz.differenceBetweenLocal
+			}">
 				<div class="icon">
 					<img src="../../svgs/${tz.night ? "moon" : "sun"}.svg" />
 				</div>
@@ -140,6 +143,33 @@ function renderTimeZones() {
 				</div>
 			</div>`
 		);
+	});
+	(
+		document.querySelectorAll(".timezone")! as NodeListOf<HTMLElement>
+	).forEach((tz) => {
+		tz.addEventListener("click", () => {
+			clearInterval(+analogClockId!);
+			updateTime(
+				new Date(
+					Date.now() +
+						+tz.getAttribute("differenceBetweenLocal")! *
+							1000 *
+							3600
+				)
+			);
+			analogClockId = window.setInterval(
+				() =>
+					updateTime(
+						new Date(
+							Date.now() +
+								+tz.getAttribute("differenceBetweenLocal")! *
+									1000 *
+									3600
+						)
+					),
+				1000
+			);
+		});
 	});
 }
 function hidePopUp() {
@@ -203,7 +233,18 @@ function updateTime(date: Date) {
 	elements.minuteHand.style.transform = `rotate(${m}deg)`;
 	elements.hourHand.style.transform = `rotate(${h}deg)`;
 }
-updateTime(new Date());
-setInterval(() => updateTime(new Date()), 1000);
+updateTime(
+	new Date(Date.now() + timeZones[0].differenceBetweenLocal * 1000 * 3600)
+);
 updateTimeZones();
-intervalid = window.setInterval(updateTimeZones, 30 * 1000);
+
+analogClockId = window.setInterval(
+	() =>
+		updateTime(
+			new Date(
+				Date.now() + timeZones[0].differenceBetweenLocal * 1000 * 3600
+			)
+		),
+	1000
+);
+timeZonesTimeId = window.setInterval(updateTimeZones, 30 * 1000);
