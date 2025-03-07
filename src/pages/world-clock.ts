@@ -121,9 +121,9 @@ function renderTimeZones() {
 			"beforeend",
 			`<div class="timezone" differenceBetweenLocal="${
 				tz.differenceBetweenLocal
-			}" timeZoneCityName="${tz.cityName}">
+			}" timeZoneCityName="${tz.cityName}" tabindex="0">
 				<div id="${tz.id}" class="icon delete-timezone-icon">
-					<img src="../../svgs/${tz.night ? "moon" : "sun"}.svg" />
+					<img src="../../svgs/${tz.night ? "moon" : "sun"}.svg" alt="" />
 				</div>
 				<span>${tz.time.split(" ")[0]} <small>${tz.time.split(" ")[1]}</small></span>
 				<div>
@@ -140,6 +140,35 @@ function renderTimeZones() {
 	(
 		document.querySelectorAll(".timezone")! as NodeListOf<HTMLElement>
 	).forEach((tz) => {
+		tz.addEventListener("keydown", (e) => {
+			if (e.key === "Enter") {
+				elements.timeZoneCity.innerHTML =
+					tz.getAttribute("timeZoneCityName")!;
+				clearInterval(+analogClockId!);
+				updateTime(
+					new Date(
+						Date.now() +
+							+tz.getAttribute("differenceBetweenLocal")! *
+								1000 *
+								3600
+					)
+				);
+				analogClockId = window.setInterval(
+					() =>
+						updateTime(
+							new Date(
+								Date.now() +
+									+tz.getAttribute(
+										"differenceBetweenLocal"
+									)! *
+										1000 *
+										3600
+							)
+						),
+					1000
+				);
+			}
+		});
 		tz.addEventListener("click", () => {
 			elements.timeZoneCity.innerHTML =
 				tz.getAttribute("timeZoneCityName")!;
@@ -167,18 +196,18 @@ function renderTimeZones() {
 		});
 	});
 
-	(
-		document.querySelectorAll(
-			".delete-timezone-icon"
-		)! as NodeListOf<HTMLElement>
-	).forEach((icon) => {
-		icon.addEventListener("click", () => {
-			const iconId = Number(icon.id);
-			timeZones = timeZones.filter((tz) => tz.id !== iconId);
-			storage.set("timeZones", timeZones);
-			console.log("hello world");
-		});
-	});
+	// (
+	// 	document.querySelectorAll(
+	// 		".delete-timezone-icon"
+	// 	)! as NodeListOf<HTMLElement>
+	// ).forEach((icon) => {
+	// 	icon.addEventListener("click", () => {
+	// 		const iconId = Number(icon.id);
+	// 		timeZones = timeZones.filter((tz) => tz.id !== iconId);
+	// 		storage.set("timeZones", timeZones);
+	// 		console.log("hello world");
+	// 	});
+	// });
 }
 function hidePopUp() {
 	elements.popUp.classList.remove("opened");
