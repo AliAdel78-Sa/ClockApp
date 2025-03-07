@@ -1,17 +1,15 @@
 import moment from "moment-timezone";
 import elements from "@/modules/elements";
 import axios from "axios";
-import { unsupportedTimeZones } from "@/data/timezones";
 import type { cleanedTimeZone, fetchedTimeZone } from "@/types";
 import storage from "@/utils/localStorage.util";
+import { timezoneMappings, unsupportedTimeZones } from "../data/timezones";
 import { formatTime } from "@/utils/stopwatch.utils";
-
 let timeZonesTimeId: number | null = null;
 let analogClockId: number | null = null;
-const timeZones: cleanedTimeZone[] = storage.get<cleanedTimeZone[]>(
-	"timeZones",
-	[getUserLocalTime()]
-)!;
+let timeZones: cleanedTimeZone[] = storage.get<cleanedTimeZone[]>("timeZones", [
+	getUserLocalTime(),
+])!;
 elements.showTimeZone.addEventListener("click", showPopUp);
 elements.overlay.addEventListener("click", hidePopUp);
 elements.cancelTimeZone.addEventListener("click", hidePopUp);
@@ -28,23 +26,18 @@ elements.addTimeZone.addEventListener("click", async () => {
 	timeZonesTimeId = window.setInterval(updateTimeZones, 30 * 1000);
 });
 elements.locationInput.addEventListener("input", (e) => {
+	const value = elements.locationInput.value.toLowerCase().trim();
 	elements.locations.innerHTML = "";
 	if (elements.locationInput.value.trim().length === 0) return;
-	moment.tz.names().forEach((tz) => {
-		if (unsupportedTimeZones.includes(tz)) return;
-		if (
-			!tz
-				.toLowerCase()
-				.includes(elements.locationInput.value.toLowerCase().trim())
-		)
-			return;
+	for (const tz in timezoneMappings) {
+		if (unsupportedTimeZones.includes(tz)) continue;
+		if (!timezoneMappings[tz].join("").toLowerCase().includes(value))
+			continue;
 		const p = document.createElement("p");
 		p.className = "location";
 		p.setAttribute("timeZone", tz);
 		p.setAttribute("tabindex", "0");
-		const city = tz.split("/")[1].split("_").join(" ");
-		const contintent = tz.split("/")[0];
-		p.innerText = `${city}, ${contintent}`;
+		p.innerText = timezoneMappings[tz].join(", ");
 		elements.locations.appendChild(p);
 		p.addEventListener("click", (e) => {
 			elements.locationInput.value = p.innerText;
@@ -65,7 +58,7 @@ elements.locationInput.addEventListener("input", (e) => {
 				elements.locations.innerHTML = "";
 			}
 		});
-	});
+	}
 	if (elements.locations.children.length === 0) {
 		const p = document.createElement("p");
 		p.className = "location";
@@ -129,7 +122,7 @@ function renderTimeZones() {
 			`<div class="timezone" differenceBetweenLocal="${
 				tz.differenceBetweenLocal
 			}" timeZoneCityName="${tz.cityName}">
-				<div class="icon">
+				<div id="${tz.id}" class="icon delete-timezone-icon">
 					<img src="../../svgs/${tz.night ? "moon" : "sun"}.svg" />
 				</div>
 				<span>${tz.time.split(" ")[0]} <small>${tz.time.split(" ")[1]}</small></span>
@@ -171,6 +164,19 @@ function renderTimeZones() {
 					),
 				1000
 			);
+		});
+	});
+
+	(
+		document.querySelectorAll(
+			".delete-timezone-icon"
+		)! as NodeListOf<HTMLElement>
+	).forEach((icon) => {
+		icon.addEventListener("click", () => {
+			const iconId = Number(icon.id);
+			timeZones = timeZones.filter((tz) => tz.id !== iconId);
+			storage.set("timeZones", timeZones);
+			console.log("hello world");
 		});
 	});
 }
