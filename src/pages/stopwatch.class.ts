@@ -24,62 +24,25 @@ export class StopWatchSystem {
 	};
 
 	/** Timestamp when the stopwatch was started */
-	private startedTime: number = storage.get(this.storageKeys.STARTEDTIME)!;
+	private startedTime = storage.get<number>(this.storageKeys.STARTEDTIME, 0);
 
 	/** Total time spent in paused state */
-	private totalPausedTime: number = storage.get(
-		this.storageKeys.TOTALPAUSEDTIME
-	)!;
+	private totalPausedTime = storage.get<number>(
+		this.storageKeys.TOTALPAUSEDTIME,
+		0
+	);
 
 	/** Current elapsed time */
-	public elapsedTime: number = storage.get(this.storageKeys.ELAPSEDTIME)!;
+	public elapsedTime = storage.get<number>(this.storageKeys.ELAPSEDTIME, 0);
 
 	/** Current running state */
-	public running: boolean = storage.get(this.storageKeys.RUNNING)!;
+	public running = storage.get<boolean>(this.storageKeys.RUNNING, false);
 
 	/** Array of recorded laps */
-	private laps = storage.get<Lap[]>(this.storageKeys.LAPS, [])!;
+	private laps = storage.get<Lap[]>(this.storageKeys.LAPS, []);
 
 	/** Reference to the update interval timer */
 	private intervalId: number | null = null;
-
-	/**
-	 * @param startedTimeKeyName - Custom storage key for the start time
-	 * @param totalPausedTimeKeyName - Custom storage key for total pause duration
-	 * @param elapsedTimeKeyName - Custom storage key for elapsed time
-	 * @param runningKeyName - Custom storage key for running state
-	 * @param lapsKeyName - Custom storage key for lap data
-	 * @param lastPauseKeyName - Custom storage key for last pause timestamp
-	 *
-	 * This allows multiple stopwatch instances to use different storage keys.
-	 */
-	constructor(
-		startedTimeKeyName?: string,
-		totalPausedTimeKeyName?: string,
-		elapsedTimeKeyName?: string,
-		runningKeyName?: string,
-		lapsKeyName?: string,
-		lastPauseKeyName?: string
-	) {
-		if (startedTimeKeyName) {
-			this.storageKeys.STARTEDTIME = startedTimeKeyName;
-		}
-		if (totalPausedTimeKeyName) {
-			this.storageKeys.TOTALPAUSEDTIME = totalPausedTimeKeyName;
-		}
-		if (elapsedTimeKeyName) {
-			this.storageKeys.ELAPSEDTIME = elapsedTimeKeyName;
-		}
-		if (runningKeyName) {
-			this.storageKeys.RUNNING = runningKeyName;
-		}
-		if (lapsKeyName) {
-			this.storageKeys.LAPS = lapsKeyName;
-		}
-		if (lastPauseKeyName) {
-			this.storageKeys.LASTPAUSE = lastPauseKeyName;
-		}
-	}
 
 	/**
 	 * Starts or resumes the stopwatch
@@ -99,9 +62,9 @@ export class StopWatchSystem {
 		}
 
 		// Calculate pause duration if resuming
-		if (storage.get(this.storageKeys.LASTPAUSE)) {
+		if (storage.get<number>(this.storageKeys.LASTPAUSE, 0)) {
 			this.totalPausedTime +=
-				Date.now() - Number(storage.get(this.storageKeys.LASTPAUSE));
+				Date.now() - storage.get<number>(this.storageKeys.LASTPAUSE, 0);
 			storage.set(this.storageKeys.TOTALPAUSEDTIME, this.totalPausedTime);
 			storage.remove(this.storageKeys.LASTPAUSE);
 		}
@@ -132,8 +95,8 @@ export class StopWatchSystem {
 		this.intervalId = null;
 		this.running = false;
 		storage.set(this.storageKeys.RUNNING, this.running);
-		if (storage.get(this.storageKeys.STARTEDTIME) === null) return;
-		if (!storage.get(this.storageKeys.LASTPAUSE)) {
+		if (storage.get(this.storageKeys.STARTEDTIME, null) === null) return;
+		if (!storage.get<number>(this.storageKeys.LASTPAUSE, 0)) {
 			storage.set(this.storageKeys.LASTPAUSE, Date.now());
 		}
 		storage.set(this.storageKeys.ELAPSEDTIME, this.elapsedTime);
@@ -224,8 +187,8 @@ export class StopWatchSystem {
 		if (!this.running) return;
 		const totalTime =
 			Date.now() -
-			+storage.get(this.storageKeys.STARTEDTIME)! -
-			+storage.get(this.storageKeys.TOTALPAUSEDTIME)!;
+			storage.get<number>(this.storageKeys.STARTEDTIME, 0) -
+			storage.get<number>(this.storageKeys.TOTALPAUSEDTIME, 0);
 		const lastLap = this.laps[this.laps.length - 1];
 		const lap: Lap = {
 			date: Date.now(),
@@ -305,7 +268,7 @@ elements.timerElement.innerHTML = formatTime(stopWatch.elapsedTime);
 if (stopWatch.running) {
 	stopWatch.startStopWatch();
 } else {
-	if (storage.get("startedTime")) {
+	if (storage.get<number>("startedTime", 0)) {
 		stopWatch.updateUI("stop");
 	} else {
 		stopWatch.updateUI("reset");

@@ -75,10 +75,8 @@ $navColor: #202020;
 
 @media (max-width: 800px) {
 	.stopwatch {
-		.wrapper {
-			h1 {
-				font-size: 4rem;
-			}
+		h1 {
+			font-size: 4rem;
 		}
 		[lap-table] {
 			width: 100%;

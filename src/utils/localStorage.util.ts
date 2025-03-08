@@ -1,51 +1,34 @@
-import { LocalStorage } from "@/types";
-
-const storage: LocalStorage = {
-	get: <T>(key: string, alt: T | null = null) => {
+class LocalStorage {
+	public get = <T>(key: string, alt: T): T => {
 		try {
-			const item = window.localStorage.getItem(key);
-			return item !== null ? (JSON.parse(item) as T) : alt;
+			const item = localStorage.getItem(key);
+			return item !== null ? JSON.parse(item) : alt;
 		} catch (error) {
-			console.error(`Local Storage Error: ${error}`);
+			console.error("Local Storage Error:", error);
 			return alt;
 		}
-	},
-	set: (key: string, value: unknown) => {
+	};
+	public set = (key: string, value: unknown) => {
 		try {
-			window.localStorage.setItem(key, JSON.stringify(value));
+			localStorage.setItem(key, JSON.stringify(value));
 		} catch (error) {
-			console.error(`Local Storage Error: ${error}`);
+			console.error("Local Storage Error:", error);
 		}
-	},
-	clear: () => {
+	};
+	public remove = (key: string) => {
 		try {
-			window.localStorage.clear();
+			localStorage.removeItem(key);
 		} catch (error) {
-			console.error(`Local Storage Error: ${error}`);
+			console.error("Local Storage Error:", error);
 		}
-	},
-	remove: (key: string) => {
+	};
+	public clear = () => {
 		try {
-			window.localStorage.removeItem(key);
+			localStorage.clear();
 		} catch (error) {
-			console.error(`Local Storage Error: ${error}`);
+			console.error("Local Storage Error:", error);
 		}
-	},
-	size: () => {
-		try {
-			let total = 0;
-			for (let i = 0; i < window.localStorage.length; i++) {
-				const key = window.localStorage.key(i);
-				if (key) {
-					const value = window.localStorage.getItem(key);
-					total += key.length + (value?.length || 0);
-				}
-			}
-			const sizeInKB = (total / 1024).toFixed(2);
-			console.log(`LocalStorage size: ${sizeInKB} KB`);
-		} catch (error) {
-			console.error(`Local Storage Error: ${error}`);
-		}
-	},
-};
+	};
+}
+const storage = new LocalStorage();
 export default storage;
