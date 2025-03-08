@@ -13,6 +13,7 @@ const laps = storage.get<Lap[]>("laps", [])!;
 elements.startBtn.addEventListener("click", startTimer);
 elements.pauseBtn.addEventListener("click", pauseTimer);
 elements.resetBtn.addEventListener("click", resetTimer);
+elements.lapBtn.addEventListener("click", addLap);
 elements.startBtn.addEventListener("keydown", (e) => {
 	if (e.key === "Enter") {
 		elements.startBtn.click();
@@ -27,10 +28,6 @@ elements.pauseBtn.addEventListener("keydown", (e) => {
 });
 elements.resetBtn.addEventListener("keydown", (e) => {
 	if (e.key === "Enter") resetTimer();
-});
-elements.lapBtn.addEventListener("click", () => {
-	addLap();
-	updateLaps();
 });
 elements.lapBtn.addEventListener("keydown", (e) => {
 	if (e.key === "Enter") elements.lapBtn.click();

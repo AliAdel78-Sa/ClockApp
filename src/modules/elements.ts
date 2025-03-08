@@ -10,12 +10,13 @@ const $a = (s: string) =>
 
 const elements = {
 	timerElement: $("[timer-element]"),
-	startBtn: $("[start-btn]"),
-	pauseBtn: $("[pause-btn]"),
-	resetBtn: $("[reset-btn]"),
+	startPauseBtn: $("#play-pause"),
+	resetBtn: $("#reset"),
 	resetIcon: $("[reset-icon]"),
-	lapBtn: $("[lap-btn]"),
+	playPauseIcon: $("[play-pause-icon]"),
+	lapBtn: $("#lap"),
 	lapTable: $("[lap-table]"),
+	lapsContainer: $("[laps-container]"),
 	lapIcon: $("[lap-icon]"),
 	nav: $("#nav"),
 	navMenu: $("#menu"),

@@ -2,7 +2,7 @@ main {
 	overflow: hidden;
 	height: 100%;
 	position: relative;
-	section {
+	> section {
 		width: 100%;
 		padding: 20px;
 		height: 100%;

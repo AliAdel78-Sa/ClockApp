@@ -229,11 +229,11 @@ body {
 	background: var(--white-color);
 	box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1), 0 25px 45px rgba(0, 0, 0, 0.1);
 	position: relative;
-	// border: 2px solid white;
+	// border: 3px solid white;
 }
 .clock label {
 	position: absolute;
-	inset: 20px;
+	inset: 40px;
 	text-align: center;
 	transform: rotate(calc(var(--i) * (360deg / 12)));
 }
