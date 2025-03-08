@@ -22,6 +22,7 @@ const elements = {
 	overlay: $("[overlay]"),
 	popUp: $("#pop-up"),
 	showTimeZone: $("#show-timezone-btn"),
+	editTimeZones: $("#edit-timezones-btn"),
 	addTimeZone: $("[add-timezone-btn]"),
 	cancelTimeZone: $("[cancel-timezone-btn]"),
 	locationInput: $("#location-input") as HTMLInputElement,

@@ -195,19 +195,6 @@ function renderTimeZones() {
 			);
 		});
 	});
-
-	// (
-	// 	document.querySelectorAll(
-	// 		".delete-timezone-icon"
-	// 	)! as NodeListOf<HTMLElement>
-	// ).forEach((icon) => {
-	// 	icon.addEventListener("click", () => {
-	// 		const iconId = Number(icon.id);
-	// 		timeZones = timeZones.filter((tz) => tz.id !== iconId);
-	// 		storage.set("timeZones", timeZones);
-	// 		console.log("hello world");
-	// 	});
-	// });
 }
 function hidePopUp() {
 	elements.popUp.classList.remove("opened");
@@ -285,3 +272,18 @@ analogClockId = window.setInterval(
 	1000
 );
 timeZonesTimeId = window.setInterval(updateTimeZones, 30 * 1000);
+
+elements.editTimeZones.addEventListener("click", (e) => {
+	elements.editTimeZones.classList.toggle("editing");
+	if (elements.editTimeZones.classList.contains("editing")) {
+	} else {
+	}
+});
+// select all delete btns
+// select all icons
+// toggle hide/visiblity of those
+// add click to the delete buttons
+// delete timezone from the storage of the same id
+// render the timezones
+
+const m = new Map<string, unknown>();
