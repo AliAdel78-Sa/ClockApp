@@ -5,7 +5,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="shortcut icon" href="/svgs/clock.svg" type="image/x-icon" />
 		<meta name="description" content="150 words" />
-
 		<link
 			href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
 			rel="stylesheet"
@@ -19,7 +18,7 @@
 		<div id="menu">
 			<img src="/svgs/menu.svg" alt="" />
 		</div>
-		<div overlay class=""></div>
+		<div overlay></div>
 		<nav id="nav">
 			<div class="active-element"></div>
 			<h1>
@@ -41,7 +40,8 @@
 				</li>
 			</ul>
 		</nav>
-		<div id="pop-up" class="">
+
+		<div id="pop-up">
 			<h3>Add new location</h3>
 			<input
 				type="text"
@@ -57,7 +57,7 @@
 			</div>
 		</div>
 		<main>
-			<section data-link="StopWatch" class="stopwatch page active">
+			<section data-link="StopWatch" class="stopwatch page">
 				<header>
 					<h1 timer-element></h1>
 				</header>
@@ -92,7 +92,7 @@
 					<main laps-container></main>
 				</section>
 			</section>
-			<section data-link="WorldClock" class="page world-clock">
+			<section data-link="WorldClock" class="world-clock page active">
 				<main>
 					<h1 timezone-city>Tokyo</h1>
 					<div class="container">
@@ -120,7 +120,7 @@
 				<aside timeZones></aside>
 				<div class="buttons-container">
 					<button id="edit-timezones-btn">
-						<img src="/svgs/edit.svg" alt="" />
+						<img src="/svgs/edit.svg" />
 					</button>
 					<button id="show-timezone-btn">
 						<img src="/svgs/add.svg" alt="" />
@@ -128,7 +128,7 @@
 				</div>
 			</section>
 			<section data-link="Timer" class="page">
-				<h1>Timer</h1>
+				<h1 style="color: var(--font-color)">Timer</h1>
 			</section>
 		</main>
 		<script type="module" src="/src/modules/elements.ts"></script>

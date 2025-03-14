@@ -1,19 +1,27 @@
-import moment from "moment-timezone";
 import elements from "@/modules/elements";
-import axios from "axios";
 import type { cleanedTimeZone, fetchedTimeZone } from "@/types";
 import storage from "@/utils/localStorage.util";
 import { timezoneMappings, unsupportedTimeZones } from "../data/timezones";
-import { formatTime } from "@/utils/stopwatch.utils";
+import { formatTime24to12 } from "@/utils/stopwatch.utils";
 let timeZonesTimeId: number | null = null;
 let analogClockId: number | null = null;
 let timeZones: cleanedTimeZone[] = storage.get<cleanedTimeZone[]>("timeZones", [
 	getUserLocalTime(),
 ])!;
+if (timeZones.length === 0) {
+	timeZones.push(getUserLocalTime());
+	storage.set("timeZones", timeZones);
+}
+
 elements.showTimeZone.addEventListener("click", showPopUp);
 elements.overlay.addEventListener("click", hidePopUp);
 elements.cancelTimeZone.addEventListener("click", hidePopUp);
+elements.editTimeZones.addEventListener("click", editTimeZones);
 elements.addTimeZone.addEventListener("click", async () => {
+	elements.editTimeZones.classList.remove("editing");
+	(elements.editTimeZones.children[0] as HTMLImageElement).src =
+		"/svgs/edit.svg";
+
 	let selectedTimeZone = elements.locationInput.getAttribute("timeZone")!;
 	hidePopUp();
 	elements.locationInput.value = "";
@@ -69,11 +77,11 @@ elements.locationInput.addEventListener("input", (e) => {
 async function fetchTimeZone(tz: string) {
 	const continent = tz.split("/")[0];
 	const city = tz.split("/")[1];
-	const data: fetchedTimeZone = (
-		await axios.get(
+	const data: fetchedTimeZone = await (
+		await fetch(
 			`https://timeapi.io/api/time/current/zone?timeZone=${continent}%2F${city}`
 		)
-	).data;
+	).json();
 	return data;
 }
 function cleanTimeZone(data: fetchedTimeZone) {
@@ -94,7 +102,7 @@ function cleanTimeZone(data: fetchedTimeZone) {
 	const differenceBetweenLocal = Math.round(
 		(localTime.getTime() - fetchedTime.getTime()) / 1000 / 3600
 	);
-	const time = moment(data.time, "HH:mm").format("hh:mm A");
+	const time = formatTime24to12(data.time);
 	const cleanedData: cleanedTimeZone = {
 		time,
 		differenceBetweenLocal,
@@ -121,9 +129,13 @@ function renderTimeZones() {
 			"beforeend",
 			`<div class="timezone" differenceBetweenLocal="${
 				tz.differenceBetweenLocal
-			}" timeZoneCityName="${tz.cityName}" tabindex="0">
-				<div id="${tz.id}" class="icon delete-timezone-icon">
-					<img src="../../svgs/${tz.night ? "moon" : "sun"}.svg" alt="" />
+			}" timeZoneCityName="${tz.cityName}" isReadOnly="${
+				tz.cityName === "Local"
+			}" id="${tz.id}" tabindex="0">
+				<div class="icon delete-timezone-icon">
+					<img src="/svgs/${tz.night ? "moon" : "sun"}.svg" alt="" previcon="${
+				tz.night ? "moon" : "sun"
+			}" />
 				</div>
 				<span>${tz.time.split(" ")[0]} <small>${tz.time.split(" ")[1]}</small></span>
 				<div>
@@ -169,7 +181,15 @@ function renderTimeZones() {
 				);
 			}
 		});
-		tz.addEventListener("click", () => {
+		tz.addEventListener("click", (e) => {
+			if (
+				(e.target! as HTMLElement).classList.contains(
+					"delete-timezone-icon"
+				) ||
+				(e.target! as HTMLImageElement).src
+			)
+				return;
+			console.log(e.target);
 			elements.timeZoneCity.innerHTML =
 				tz.getAttribute("timeZoneCityName")!;
 			clearInterval(+analogClockId!);
@@ -217,6 +237,7 @@ function updateTimeZones() {
 		const isNight = time.getHours() >= 19 || time.getHours() < 6;
 		tz.time = formattedTime;
 		tz.night = isNight;
+		tz.date = time.toLocaleDateString();
 		renderTimeZones();
 	});
 	storage.set("timeZones", timeZones);
@@ -257,6 +278,55 @@ function updateTime(date: Date) {
 	elements.minuteHand.style.transform = `rotate(${m}deg)`;
 	elements.hourHand.style.transform = `rotate(${h}deg)`;
 }
+function editTimeZones() {
+	elements.editTimeZones.classList.toggle("editing");
+	const editIcon = elements.editTimeZones.children[0] as HTMLImageElement;
+	const deleteIcons = document.querySelectorAll(
+		".delete-timezone-icon"
+	)! as NodeListOf<HTMLImageElement>;
+
+	if (elements.editTimeZones.classList.contains("editing")) {
+		editIcon.src = "/svgs/check.svg";
+		deleteIcons.forEach((icon) => {
+			const iconChild = icon.children[0] as HTMLImageElement;
+			const timeZoneElement = iconChild!.closest(".timezone")!;
+			const isLocal = timeZoneElement.getAttribute("isReadOnly");
+			if (isLocal === "false") {
+				icon.addEventListener("click", deleteTimeZone);
+				iconChild.src = "/svgs/trash.svg";
+			}
+		});
+	} else {
+		editIcon.src = "/svgs/edit.svg";
+		deleteIcons.forEach((icon) => {
+			icon.removeEventListener("click", deleteTimeZone);
+			const iconChild = icon.children[0] as HTMLImageElement;
+			iconChild.src = `/svgs/${iconChild.getAttribute("previcon")}.svg`;
+		});
+	}
+}
+function deleteTimeZone(e: MouseEvent) {
+	const targetElement = e.target! as HTMLElement;
+	const timeZoneElement = targetElement.closest(".timezone")!;
+	timeZones = timeZones.filter((tz) => +tz.id !== +timeZoneElement.id);
+	storage.set("timeZones", timeZones);
+	timeZoneElement.remove();
+	clearInterval(+analogClockId!);
+	elements.timeZoneCity.innerHTML = "Local";
+	updateTime(
+		new Date(Date.now() + timeZones[0].differenceBetweenLocal * 1000 * 3600)
+	);
+	analogClockId = window.setInterval(
+		() =>
+			updateTime(
+				new Date(
+					Date.now() +
+						timeZones[0].differenceBetweenLocal * 1000 * 3600
+				)
+			),
+		1000
+	);
+}
 elements.timeZoneCity.innerHTML = "Local";
 updateTime(
 	new Date(Date.now() + timeZones[0].differenceBetweenLocal * 1000 * 3600)
@@ -272,18 +342,3 @@ analogClockId = window.setInterval(
 	1000
 );
 timeZonesTimeId = window.setInterval(updateTimeZones, 30 * 1000);
-
-elements.editTimeZones.addEventListener("click", (e) => {
-	elements.editTimeZones.classList.toggle("editing");
-	if (elements.editTimeZones.classList.contains("editing")) {
-	} else {
-	}
-});
-// select all delete btns
-// select all icons
-// toggle hide/visiblity of those
-// add click to the delete buttons
-// delete timezone from the storage of the same id
-// render the timezones
-
-const m = new Map<string, unknown>();

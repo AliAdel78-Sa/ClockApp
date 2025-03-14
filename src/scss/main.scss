@@ -1,7 +1,7 @@
 @use "./reset";
 @use "./layouts/nav";
-@use "./layouts/main";
-@use "./components/stopwatch";
+@use "./layouts/homePage";
+@use "./components/stop-watch";
 @use "./components/world-clock";
 @use "./layouts/overlay";
 @use "./components/preloader";

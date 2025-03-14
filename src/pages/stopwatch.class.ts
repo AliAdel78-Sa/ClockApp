@@ -14,7 +14,7 @@ import { formatTime } from "@/utils/stopwatch.utils";
  */
 export class StopWatchSystem {
 	/** Storage key mappings for persistent data */
-	private storageKeys = {
+	public storageKeys = {
 		STARTEDTIME: "startedTime", // When the stopwatch first started
 		TOTALPAUSEDTIME: "totalPausedTime", // Cumulative pause duration
 		ELAPSEDTIME: "elapsedTime", // Total time elapsed
@@ -53,7 +53,7 @@ export class StopWatchSystem {
 	public startStopWatch = () => {
 		// Set running state and persist it
 		this.running = true;
-		storage.set(this.storageKeys.RUNNING, String(this.running));
+		storage.set(this.storageKeys.RUNNING, this.running);
 
 		// Initialize start time if first start
 		if (!this.startedTime) {
@@ -109,6 +109,7 @@ export class StopWatchSystem {
 	 * - Resets UI elements
 	 * - Clears lap history
 	 */
+
 	public resetStopWatch = () => {
 		window.clearInterval(Number(this.intervalId));
 		this.intervalId = null;
@@ -137,29 +138,21 @@ export class StopWatchSystem {
 	 * - Lap and reset icons
 	 */
 	public updateUI = (status: "stop" | "start" | "reset") => {
-		switch (status) {
-			case "stop":
-				elements.playPauseIcon.className = "bx bx-play";
-				elements.resetIcon.style.fill = "#fefefe";
-				elements.playPauseIcon.style.transform = "translateX(3px)";
-				elements.timerElement.style.color = "#cecece";
-				elements.lapIcon.style.color = "#7b7b7b";
-				break;
-			case "start":
-				elements.playPauseIcon.className = "bx bx-pause";
-				elements.playPauseIcon.style.transform = "translateX(0px)";
-				elements.timerElement.style.color = "#fefefe";
-				elements.resetIcon.style.fill = "#fefefe";
-				elements.lapIcon.style.color = "#fefefe";
-				break;
-			case "reset":
-				elements.playPauseIcon.className = "bx bx-play";
-				elements.playPauseIcon.style.transform = "translateX(3px)";
-				elements.timerElement.style.color = "#cecece";
-				elements.resetIcon.style.fill = "#7b7b7b";
-				elements.lapIcon.style.color = "#7b7b7b";
-				break;
-		}
+		elements.playPauseIcon.className = `${
+			status === "start" ? "bx bx-pause" : "bx bx-play"
+		}`;
+		elements.resetIcon.style.fill = `${
+			status === "reset" ? "#7b7b7b" : "#fefefe"
+		}`;
+		elements.lapIcon.style.color = `${
+			status === "start" ? "#fefefe" : "#7b7b7b"
+		}`;
+		elements.timerElement.style.color = `${
+			status === "start" ? "#fefefe" : "#cecece"
+		}`;
+		elements.playPauseIcon.style.transform = `${
+			status === "start" ? "translateX(0px)" : "translateX(3px)"
+		}`;
 	};
 
 	/**
@@ -247,19 +240,11 @@ export class StopWatchSystem {
 	};
 }
 
-// Stop Watch Instance
-const stopWatch = new StopWatchSystem();
-
 // Events:
-elements.startPauseBtn.addEventListener("click", () => {
-	if (stopWatch.running) {
-		stopWatch.stopStopWatch();
-		stopWatch.updateUI("stop");
-	} else {
-		stopWatch.startStopWatch();
-		stopWatch.updateUI("start");
-	}
-});
+const stopWatch = new StopWatchSystem();
+elements.startPauseBtn.addEventListener("click", () =>
+	stopWatch.running ? stopWatch.stopStopWatch() : stopWatch.startStopWatch()
+);
 elements.resetBtn.addEventListener("click", stopWatch.resetStopWatch);
 elements.lapBtn.addEventListener("click", stopWatch.addLap);
 
@@ -268,7 +253,7 @@ elements.timerElement.innerHTML = formatTime(stopWatch.elapsedTime);
 if (stopWatch.running) {
 	stopWatch.startStopWatch();
 } else {
-	if (storage.get<number>("startedTime", 0)) {
+	if (storage.get<number>(stopWatch.storageKeys.STARTEDTIME, 0)) {
 		stopWatch.updateUI("stop");
 	} else {
 		stopWatch.updateUI("reset");
