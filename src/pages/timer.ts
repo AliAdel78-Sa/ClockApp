@@ -129,3 +129,5 @@ if (running) {
 		updateUI("reset");
 	}
 }
+
+let x = 20;
