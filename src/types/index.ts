@@ -29,3 +29,11 @@ export type cleanedTimeZone = {
 	cityName: string;
 	night: boolean | null;
 };
+
+export type timer = {
+	startedTime: number;
+	totalPausedTime: number;
+	running: boolean;
+	intervalId: number;
+	id: number;
+};

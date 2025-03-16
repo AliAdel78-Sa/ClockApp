@@ -1,28 +1,29 @@
 import "./scss/main.scss";
 import "@/modules/navigation";
-import "@/pages/stopwatch.class";
 import "@/ui/nav";
+import "@/pages/stopwatch";
 import "@/pages/world-clock";
-import elements from "./modules/elements";
-
+import "@/pages/timer";
+import elements from "@/modules/elements";
 setTimeout(() => elements.loader.classList.add("hide"), 500);
 
-const experienceStart = new Date(2024, 6, 24, 21, 40, 0);
-function convertMilliseconds(ms: number) {
-	const MS_IN_A_DAY = 1000 * 60 * 60 * 24;
-	const MS_IN_A_YEAR = MS_IN_A_DAY * 365.25;
-	const MS_IN_A_MONTH = MS_IN_A_YEAR / 12;
-	const years = Math.floor(ms / MS_IN_A_YEAR);
-	ms %= MS_IN_A_YEAR;
-	const months = Math.floor(ms / MS_IN_A_MONTH);
-	ms %= MS_IN_A_MONTH;
-	const days = Math.floor(ms / MS_IN_A_DAY);
-	return { years, months, days };
+function formatDuration(ms: number) {
+	const seconds = Math.floor(ms / 1000) % 60;
+	const minutes = Math.floor(ms / (1000 * 60)) % 60;
+	const hours = Math.floor(ms / (1000 * 60 * 60)) % 24;
+	const days = Math.floor(ms / (1000 * 60 * 60 * 24)) % 30;
+	const months = Math.floor(ms / (1000 * 60 * 60 * 24 * 30)) % 12;
+	const years = Math.floor(ms / (1000 * 60 * 60 * 24 * 365));
+	return `${years}y ${months}mo ${days}d ${hours}h ${minutes}m ${seconds}s`;
 }
-let t = new Date(2030, 7, 8).getTime() - Date.now();
-console.log(convertMilliseconds(t));
+handlingImportantDates();
+setInterval(handlingImportantDates, 1000);
 
-const days = t / 1000 / 60 / 1440;
-console.log(days); // 1970 days...
-
-// 5 years, 4 months, and 23 days...
+function handlingImportantDates() {
+	const experienceStart =
+		Date.now() - new Date(2024, 6, 24, 21, 40, 0).getTime();
+	const loveStarted = Date.now() - new Date(2021, 9, 10, 8, 0, 0).getTime();
+	const marrying = new Date(2030, 7, 8).getTime() - Date.now();
+	document.querySelector(`[test-element]`)!.textContent =
+		formatDuration(marrying);
+}
