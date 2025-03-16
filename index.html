@@ -59,13 +59,13 @@
 		<main>
 			<section data-link="StopWatch" class="stopwatch page">
 				<header>
-					<h1 timer-element></h1>
+					<h1 stopwatch-element></h1>
 				</header>
 				<section class="control-stopwatch-buttons">
 					<button id="lap">
 						<i class="bx bxs-flag bx-md" lap-icon></i>
 					</button>
-					<button id="play-pause" class="play">
+					<button id="play-pause" class="play-pause">
 						<i play-pause-icon></i>
 					</button>
 					<button id="reset">
@@ -131,32 +131,22 @@
 				<header>
 					<div id="progress-bar">
 						<div id="circle">
-							<h1
-								test-element
-								style="
-									font-size: 4rem;
-									font-weight: normal;
-									color: white;
-									text-align: center;
-									font-family: system-ui;
-								"
-							>
-								00:00:00
-							</h1>
+							<h1 test-element timer-element>00:00:00</h1>
 						</div>
 					</div>
 				</header>
-				<section>
-					<button>
-						<i class="bx bx-play" play-pause-icon></i>
+				<section class="control-stopwatch-buttons">
+					<button play-pause-timer class="play-pause">
+						<i play-pause-timer-icon></i>
 					</button>
-					<button>
+					<button reset-timer-btn>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							height="35px"
 							width="35px"
 							viewBox="0 -960 960 960"
 							fill="#7b7b7b"
+							reset-timer-icon
 						>
 							<path
 								d="M480-80q-75 0-140.5-28T225-185q-49-49-77-114.5T120-440h60q0 125 87.5 212.5T480-140q125 0 212.5-87.5T780-440q0-125-85-212.5T485-740h-23l73 73-41 42-147-147 147-147 41 41-78 78h23q75 0 140.5 28T735-695q49 49 77 114.5T840-440q0 75-28 140.5T735-185q-49 49-114.5 77T480-80Z"

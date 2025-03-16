@@ -2,7 +2,14 @@ $blueColor: #76b9ed;
 $mainColor: #272727;
 $navColor: #202020;
 
-.stopwatch {
+@property --gradient-angle {
+	syntax: "<length-percentage>";
+	inherits: false;
+	initial-value: 0%;
+}
+
+.stopwatch,
+.timer {
 	display: flex;
 	align-items: center;
 	flex-flow: column;
@@ -36,7 +43,7 @@ $navColor: #202020;
 			&:hover {
 				background-color: #5498cc;
 			}
-			&:not(#play-pause) {
+			&:not(.play-pause) {
 				background-color: #303030;
 				color: #7b7b7b;
 				border: 5px solid #343434;
@@ -72,7 +79,6 @@ $navColor: #202020;
 		}
 	}
 }
-
 @media (max-width: 800px) {
 	.stopwatch {
 		h1 {
@@ -80,6 +86,32 @@ $navColor: #202020;
 		}
 		[lap-table] {
 			width: 100%;
+		}
+	}
+}
+
+#progress-bar {
+	width: 430px;
+	height: 430px;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: --gradient-angle 500ms;
+	background-image: conic-gradient(
+		#76b9ed var(--gradient-angle),
+		#3e3e3e var(--gradient-angle)
+	);
+	#circle {
+		width: 90%;
+		height: 90%;
+		background-color: var(--bg-color);
+		display: flex;
+		border-radius: 50%;
+		justify-content: center;
+		align-items: center;
+		* {
+			font-size: 5.5rem;
 		}
 	}
 }

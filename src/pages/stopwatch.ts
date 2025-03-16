@@ -59,7 +59,7 @@ function resetStopWatch() {
 	window.clearInterval(Number(intervalId));
 	intervalId = null;
 	running = false;
-	elements.timerElement.innerHTML = "00:00:00.00";
+	elements.stopwatchElement.innerHTML = "00:00:00.00";
 	storage.remove(storageKeys.RUNNING);
 	storage.remove(storageKeys.STARTEDTIME);
 	storage.remove(storageKeys.LASTPAUSE);
@@ -83,7 +83,7 @@ function updateUI(status: "stop" | "start" | "reset") {
 	elements.lapIcon.style.color = `${
 		status === "start" ? "#fefefe" : "#7b7b7b"
 	}`;
-	elements.timerElement.style.color = `${
+	elements.stopwatchElement.style.color = `${
 		status === "start" ? "#fefefe" : "#cecece"
 	}`;
 	elements.playPauseIcon.style.transform = `${
@@ -92,7 +92,7 @@ function updateUI(status: "stop" | "start" | "reset") {
 }
 function updateStopWatch(startedTime: number, totalPausedTime: number) {
 	elapsedTime = Date.now() - startedTime - totalPausedTime;
-	elements.timerElement.innerHTML = formatTime(elapsedTime);
+	elements.stopwatchElement.innerHTML = formatTime(elapsedTime);
 }
 function addLap() {
 	if (!running) return;
@@ -148,7 +148,7 @@ elements.startPauseBtn.addEventListener("click", () =>
 elements.resetBtn.addEventListener("click", resetStopWatch);
 elements.lapBtn.addEventListener("click", addLap);
 
-elements.timerElement.innerHTML = formatTime(elapsedTime);
+elements.stopwatchElement.innerHTML = formatTime(elapsedTime);
 if (running) {
 	startStopWatch();
 } else {

@@ -5,9 +5,8 @@
  */
 
 const $ = (s: string) => document.querySelector(s)! as HTMLElement;
-
 const elements = {
-	timerElement: $("[timer-element]"),
+	stopwatchElement: $("[stopwatch-element]"),
 	startPauseBtn: $("#play-pause"),
 	resetBtn: $("#reset"),
 	resetIcon: $("[reset-icon]"),
@@ -32,5 +31,11 @@ const elements = {
 	secondHand: $(".second"),
 	timeZoneCity: $("[timezone-city]"),
 	loader: $("#preloader"),
+	timerElement: $("[timer-element]"),
+	resetTimerBtn: $("[reset-timer-btn]"),
+	playPauseTimerIcon: $("[play-pause-timer-icon]"),
+	resetTimerIcon: $("[reset-timer-icon]"),
+	progressBar: $("#progress-bar"),
+	startPauseTimerBtn: $("[play-pause-timer]"),
 };
 export default elements;
