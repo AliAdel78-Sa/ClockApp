@@ -152,35 +152,9 @@ function renderTimeZones() {
 	(
 		document.querySelectorAll(".timezone")! as NodeListOf<HTMLElement>
 	).forEach((tz) => {
-		tz.addEventListener("keydown", (e) => {
-			if (e.key === "Enter") {
-				elements.timeZoneCity.innerHTML =
-					tz.getAttribute("timeZoneCityName")!;
-				clearInterval(+analogClockId!);
-				updateTime(
-					new Date(
-						Date.now() +
-							+tz.getAttribute("differenceBetweenLocal")! *
-								1000 *
-								3600
-					)
-				);
-				analogClockId = window.setInterval(
-					() =>
-						updateTime(
-							new Date(
-								Date.now() +
-									+tz.getAttribute(
-										"differenceBetweenLocal"
-									)! *
-										1000 *
-										3600
-							)
-						),
-					1000
-				);
-			}
-		});
+		tz.addEventListener("keydown", (e) =>
+			e.key === "Enter" ? tz.click() : null
+		);
 		tz.addEventListener("click", (e) => {
 			if (
 				(e.target! as HTMLElement).classList.contains(

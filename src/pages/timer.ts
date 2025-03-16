@@ -1,4 +1,4 @@
-// TODO: TELL DAD WHEN KAREEM RETURNS
+// TODO: ADD EDITING TIMER FUNCTIONALLITY
 
 import elements from "@/modules/elements";
 import storage from "@/utils/localStorage.util";
@@ -84,6 +84,9 @@ function updateUI(status: "stop" | "start" | "reset") {
 	}`;
 	elements.playPauseTimerIcon.style.transform = `${
 		status === "start" ? "translateX(0px)" : "translateX(3px)"
+	}`;
+	elements.resetTimerBtn.style.cursor = `${
+		status === "reset" ? "not-allowed" : "pointer"
 	}`;
 }
 function updateStopWatch(startedTime: number, totalPausedTime: number) {

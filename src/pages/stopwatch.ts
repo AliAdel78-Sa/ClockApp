@@ -1,3 +1,5 @@
+// TODO: FIX LAPS CALCULATION ISSUES
+
 import elements from "@/modules/elements";
 import type { Lap } from "@/types";
 import storage from "@/utils/localStorage.util";
@@ -89,6 +91,12 @@ function updateUI(status: "stop" | "start" | "reset") {
 	elements.playPauseIcon.style.transform = `${
 		status === "start" ? "translateX(0px)" : "translateX(3px)"
 	}`;
+	elements.resetBtn.style.cursor = `${
+		status === "reset" ? "not-allowed" : "pointer"
+	}`;
+	elements.lapBtn.style.cursor = `${
+		status === "start" ? "pointer" : "not-allowed"
+	}`;
 }
 function updateStopWatch(startedTime: number, totalPausedTime: number) {
 	elapsedTime = Date.now() - startedTime - totalPausedTime;
@@ -104,7 +112,7 @@ function addLap() {
 	const lap: Lap = {
 		date: Date.now(),
 		totalTime,
-		time: lastLap ? Date.now() - lastLap.date : totalTime,
+		time: lastLap ? Date.now() - lastLap.date - storage.get<number>(storageKeys.TOTALPAUSEDTIME, 0) : totalTime,
 	};
 	laps.push(lap);
 	elements.lapsContainer.prepend(
