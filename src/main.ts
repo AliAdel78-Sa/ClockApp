@@ -4,6 +4,7 @@ import "@/ui/nav";
 import "@/pages/stopwatch";
 import "@/pages/world-clock";
 import "@/pages/timer";
+import "@/pages/dates";
 import elements from "@/modules/elements";
 setTimeout(() => elements.loader.classList.add("hide"), 500);
 
@@ -16,13 +17,16 @@ function formatDuration(ms: number) {
   const years = Math.floor(ms / (1000 * 60 * 60 * 24 * 365));
   return `${years}y ${months}mo ${days}d ${hours}h ${minutes}m ${seconds}s`;
 }
-
 handlingImportantDates();
 setInterval(handlingImportantDates, 1000);
 function handlingImportantDates() {
   const experienceStart = Date.now() - new Date(2024, 6, 24, 21, 40, 0).getTime();
-  const loveStarted = Date.now() - new Date(2021, 9, 10, 8, 0, 0).getTime();
   const marrying = new Date(2030, 7, 8).getTime() - Date.now();
-  // document.querySelector(`[test-element]`)!.textContent =
-  // 	formatDuration(marrying);
+  const ramadan = calcDate(new Date(2025, 2, 29));
+  const loveStarted = Date.now() - new Date(2021, 9, 10, 8, 0, 0).getTime();
+  const metengeneh = calcDate(new Date(2027, 8, 21));
+  // document.querySelector("[test-element]")!.innerHTML = formatDuration(experienceStart);
+}
+function calcDate(date: Date) {
+  return date.getTime() - Date.now();
 }
